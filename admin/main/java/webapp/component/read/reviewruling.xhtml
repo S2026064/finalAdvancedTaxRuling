@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/XHtml.xhtml to edit this template
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:o="http://omnifaces.org/ui">
+    <ui:component>
+
+        <b:panel look="default" collapsible="false">
+            <b:panelGrid colSpans="12" styleClass="ui-fluid">
+                <p:outputPanel id="review">
+                    <b:panel title="Ruling details" id="rulingSummaryPanel" look="primary" collapsible="false" rendered="#{sharedBean.entity.status eq 'RULING_REQUIRES_AUTHORISATION'}">
+                        <p:panelGrid columns="4" styleClass="ui-panelgrid-blank" style="width:100%;">
+                            <h:outputLabel value="Status:" styleClass="no-bg"/>
+                            <h:outputText value="Ruling has been uploaded" styleClass="no-bg"/>
+                            <h:outputLabel value="Uploaded on:" styleClass="no-bg"/>
+                            <h:outputText value="#{sharedBean.entity.updatedDate}" styleClass="no-bg"/>
+
+                            <h:outputLabel value="Type of ruling:" styleClass="no-bg"/>
+                            <h:outputText value="#{sharedBean.entity.validityDetail.validityRulingType.toString()}" styleClass="no-bg"/>
+                            <h:outputLabel value="Validity:" styleClass="no-bg"/>
+                            <h:outputText value="This ruling is valid for a period of #{sharedBean.entity.validityDetail.validityPeriodYears} years from #{sharedBean.entity.validityDetail.validityStartDate}" styleClass="no-bg"/>
+                        </p:panelGrid>
+                        <p:panelGrid columns="1" styleClass="ui-panelgrid-blank" style="width:100%;">
+                            <h3>Act</h3>
+                            <h:outputLabel value="#{sharedBean.selectedTaxAct.toString()}" styleClass="no-bg"/>
+                            <ui:repeat value="#{sharedBean.entity.rulingActSections}" var="section" varStatus="status">
+                                <h:outputText value="#{section.actSection.description}" />
+                                <h:outputText value=", " rendered="#{!status.last}" />
+                            </ui:repeat>
+                        </p:panelGrid>
+                    </b:panel>
+
+                    <b:panel look="primary" title="List of documents" collapsible="false">
+                        <b:panelGrid colSpans="2,3,3,2,2" size="lg" styleClass="ui-fluid">
+                            <p:outputLabel value="Date"/>
+                            <p:outputLabel value="Description"/>
+                            <p:outputLabel value="Document Type"/>
+                            <p:outputLabel value="Size"/>
+                            <p:outputLabel value="Action"/>
+                        </b:panelGrid>                    
+                        <p:separator/>
+                        <ui:repeat value="#{sharedBean.entity.supportingDocuments}" var="document" varStatus="documentVarStatus">
+                            <b:panelGrid colSpans="2,3,3,2,2" size="lg" styleClass="ui-fluid">
+                                <b:formGroup>
+                                    <h:outputText value="#{document.createdDate}" styleClass="customCSS">
+                                        <f:convertDateTime   pattern="dd MMMM yyyy"/>
+                                    </h:outputText>
+                                </b:formGroup>
+                                <b:formGroup>
+                                    <h:outputText value="#{document.description}" styleClass="customCSS"/>
+                                </b:formGroup>
+                                <b:formGroup>
+                                    <h:outputText value="#{document.documentType.toString()}" styleClass="customCSS"/> 
+                                </b:formGroup>
+                                <b:formGroup>
+                                    <h:outputText value="#{document.documentSize}" styleClass="customCSS"/>
+                                </b:formGroup>
+                                <b:formGroup>
+                                    <b:panelGrid colSpans="12" size="lg" styleClass="ui-fluid">
+                                        <p:commandButton    styleClass="btn-size-sm"  value="Download" actionListener="#{sharedBean.recordDownload(document)}"  ajax="false" immediate="true"  update="@form">
+                                            <p:fileDownload  value="#{sharedBean.downloadFile}"/>
+                                        </p:commandButton>
+                                    </b:panelGrid>
+                                </b:formGroup>
+                            </b:panelGrid>
+                            <p:separator/> 
+                        </ui:repeat>
+                    </b:panel>
+
+                </p:outputPanel>
+            </b:panelGrid>
+            <f:facet name="footer">
+                <b:row>
+                    <b:panelGrid colSpans="6,6" size="lg" styleClass="ui-fluid" rendered="#{sharedBean.entity.status ne 'REQUEST_WITHDRAWAL_DRAFT_RULING' and sharedBean.entity.status ne 'REQUEST_WITHDRAWAL_SANITISED_RULING'}">
+                        <b:commandButton large-screen="full-width" size="lg" value="Approve" action="#{sharedBean.approve(sharedBean.entity)}"     icon="check" look="success"   immediate="true" update="@form" />
+                        <b:commandButton large-screen="full-width" size="lg"  value="Reject" icon="remove"  look="danger" onclick="PF('withdrawDialog').show()" type="button"/>
+                    </b:panelGrid>
+                    <b:panelGrid colSpans="6,6" size="lg" styleClass="ui-fluid" rendered="#{sharedBean.entity.status eq 'REQUEST_WITHDRAWAL_DRAFT_RULING' or sharedBean.entity.status eq 'REQUEST_WITHDRAWAL_SANITISED_RULING'}">
+                        <b:commandButton large-screen="full-width" size="lg" value="Accept withdrawal" action="#{sharedBean.renderWithrawalPanel(sharedBean.entity)}"     icon="check" look="success"   immediate="true" update="@form" />
+                        <b:commandButton large-screen="full-width" size="lg"  value="Reject withdrawal"  action="#{sharedBean.renderWithrawalRjectPanel(sharedBean.entity)}"  icon="remove"  look="danger"  immediate="true" update="@form" />
+                    </b:panelGrid>
+                </b:row>
+            </f:facet>
+        </b:panel>
+    </ui:component>
+</html>

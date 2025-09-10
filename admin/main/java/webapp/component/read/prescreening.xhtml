@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html">
+    <ui:component>
+
+        <b:panel  look="default" collapsible="false" >
+            <!--<b:label value="Questions" style="font-size: 15px"/>-->
+            <b:panel look="primary" title="Questions" collapsible="false">
+                <p style="font-size: 15px; font-weight: bold">All the following questions need to be answered before you can continue</p>
+                <ui:repeat value="#{sharedBean.applicationQuestions}" var="response" varStatus="screeningVarStatus">
+                    <b:panelGrid colSpans="10,2" size="md" rendered="#{response.question.questionType eq 'PRE_SCREENING'}" styleClass="ui-fluid" style="font-size: 14px;margin-bottom: 15px">
+                        <p:column styleClass="xlarge"  style="box-sizing:border-box">
+                            <h:outputText value="#{response.question.description}" style="#{sharedBean.isSubQuestion(response.question.description) ? 'padding-left:20px':''}"/>
+                            <h:panelGroup id="tooltipIcon" layout="inline" style="margin-left:5px;" rendered="#{response.question.questionDetail.trim() ne ''}">
+                                <i class="pi pi-info-circle" style="font-size: 1rem; color: #007ad9; cursor: help;"></i>
+                            </h:panelGroup>
+
+                            <p:tooltip for="tooltipIcon" value="#{response.question.questionDetail}" styleClass="custom-tooltip" />
+                        </p:column> 
+                        <p:column styleClass="md"  rendered="#{response.question.questionDetail.trim() ne ''}">
+                            <p:selectOneRadio value="#{response.responseOption}"  converter="entityConverter" required="true" requiredMessage="Please select an option" >
+                                <f:selectItems value="#{sharedBean.responsesList}" />
+                            </p:selectOneRadio>
+                        </p:column>
+                    </b:panelGrid>
+                </ui:repeat>
+            </b:panel>
+
+        </b:panel>
+
+    </ui:component>
+</html>

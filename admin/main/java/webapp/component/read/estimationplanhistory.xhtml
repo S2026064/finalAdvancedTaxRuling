@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/XHtml.xhtml to edit this template
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html">
+    <ui:component>
+        <b:panel id="thisestimatedHistoryPanel" look="default" collapsible="false" style="font-size: 14px !important;">
+            <b:panel rendered="#{sharedBean.add}" look="default" collapsible="false" styleClass="ui-fluid">
+                <f:facet name="heading">
+                    <b:panelGrid colSpans="12" size="lg" styleClass="ui-fluid">
+                        <p:outputLabel value="Atr History" styleClass="panel-title-css"/>
+                    </b:panelGrid>
+                </f:facet>
+                <p:dataTable value="#{sharedBean.revisions}" var="historyPlan" paginator="true" paginatorAlwaysVisible="false" reflow="true" rows="10">
+                    <p:column headerText="Rev Number">
+                        <h:outputText value="#{historyPlan.revisionNumber}"/>
+                    </p:column> 
+                    <p:column headerText="Revision Date">
+                        <h:outputText value="#{historyPlan.revisionTimestamp}">
+                            <f:convertDateTime pattern="dd/MM/yyyy"/>
+                        </h:outputText>
+                    </p:column> 
+                    <p:column headerText="Revision Type">
+                        <h:outputText value="#{historyPlan.revisionType}"/>
+                    </p:column> 
+                    <p:column headerText="Revision User">
+                        <h:outputText value="#{historyPlan.username}"/>
+                    </p:column>
+                    <p:column headerText="Action" styleClass="large">
+                        <p:commandButton styleClass="ui-button-primary btn-size-sm" value="View" action="#{sharedBean.loadRevisionData(historyPlan.revisionNumber)}" update="@form"/>
+                    </p:column>
+                </p:dataTable>
+            </b:panel>
+            <b:panel  collapsible="false" rendered="#{sharedBean.viewHistory}">
+                <f:facet name="heading">
+                    <p:outputLabel value="Review Estimate Plan - Detail" styleClass="panel-title-css"/>
+                </f:facet>
+                <p:tab title="Review Estimate Plan - Detail">
+                    <b:panelGrid colSpans="12" size="lg" styleClass="ui-fluid">
+                        <b:panel look="primary" collapsible="false">
+                            <f:facet name="heading">
+                                <h:outputText value="Application"/>
+                            </f:facet>
+                            <b:panelGrid colSpans="12" size="lg" styleClass="ui-fluid">
+                                <b:formGroup>
+                                    <p:outputLabel value="ATR Reference No:"/>
+                                    <p:outputLabel value="#{sharedBean.entity.caseNum}" 
+                                                   styleClass="form-control-static"/>
+                                </b:formGroup>
+                                <b:formGroup>
+                                    <p:outputLabel value="Allocated Manager:"/>
+                                    <p:outputLabel value="#{sharedBean.entity.applicantName}" 
+                                                   styleClass="form-control-static"/>
+                                </b:formGroup>
+                                <b:formGroup>
+                                    <p:outputLabel value="Status"/>
+                                    <p:outputLabel value="#{sharedBean.entity.status.toString()}" 
+                                                   styleClass="form-control-static"/>
+                                </b:formGroup>
+                                <b:formGroup>
+                                    <p:outputLabel value="Applicant Name:"/>
+                                    <p:outputLabel value="#{sharedBean.entity.applicantName}" 
+                                                   styleClass="form-control-static"/>
+                                </b:formGroup>
+                            </b:panelGrid>
+                        </b:panel>
+                    </b:panelGrid>
+
+                    <b:panelGrid colSpans="12" size="lg" styleClass="ui-fluid">
+                        <b:panel look="primary" collapsible="false">
+                            <f:facet name="heading">
+                                <h:outputText value="Plan Details"/>
+                            </f:facet>
+                            <p:separator/>
+                            <b:panelGrid colSpans="12" size="lg" styleClass="ui-fluid">
+                                <b:formGroup>
+                                    <p:outputLabel value="Complexity Level"/>
+                                    <p:outputLabel value="#{sharedBean.selectedRevision.chargeOutRateCategory.description}" 
+                                                   styleClass="form-control-static"/>
+                                </b:formGroup>
+                                <b:formGroup>
+                                    <!-- Placeholder for any additional controls -->
+                                </b:formGroup>
+                            </b:panelGrid>
+                            <p:separator/>
+
+                            <b:panelGrid colSpans="12" size="lg" styleClass="ui-fluid">
+                                <b:panelGrid colSpans="4,2,2,2,2" size="lg" styleClass="ui-fluid">
+                                    <b:formGroup>
+                                        <p:outputLabel value="Screen and allocation"/>
+                                        <div class="d-flex align-items-center">
+                                            <h:outputText value="Screen and allocation[Non Billable]" 
+                                                          styleClass="form-control-plaintext font-weight-bold text-primary" 
+                                                          style="font-size: 1.2rem;"/>
+                                        </div>
+                                    </b:formGroup> 
+                                    <b:formGroup>
+                                        <p:outputLabel value="Consultant Hours"/>
+                                        <p:inputText readonly="true" value="#{sharedBean.selectedRevision.consultantHours}"/>
+                                    </b:formGroup> 
+                                    <b:formGroup>
+                                        <p:outputLabel value="Manager Hours"/>
+                                        <p:inputText   readonly="true" value="#{sharedBean.selectedRevision.managerHours}"/>
+                                    </b:formGroup> 
+                                    <b:formGroup>
+                                        <p:outputLabel value="Total Hours" styleClass="font-weight-bold"/>
+                                        <div class="col-12 md:col-4">
+                                            <div class="ui-inputgroup">
+                                                <p:inputText  value="#{sharedBean.selectedRevision.totalHours}" 
+                                                             styleClass="form-control text-right font-weight-bold"   disabled="true" placeholder="0.00"/>
+                                                <div class="ui-inputgroup-addon">Hrs</div>
+                                            </div>
+                                        </div>
+                                    </b:formGroup>
+                                    <b:formGroup>
+                                        <p:outputLabel value="Total"/>
+                                        <div class="col-12 md:col-4">
+                                            <div class="ui-inputgroup">
+                                                <div class="ui-inputgroup-addon">R</div>
+                                                <p:inputText  value="#{sharedBean.selectedRevision.subtotalFee}" 
+                                                             styleClass="form-control text-right font-weight-bold"     disabled="true" placeholder="Price"/>
+                                            </div>
+                                        </div>
+                                    </b:formGroup>
+                                </b:panelGrid>
+                                <b:panelGrid colSpans="4,4,4" size="lg" styleClass="ui-fluid">
+                                    <b:formGroup>
+                                        <!-- Empty column for layout -->
+                                    </b:formGroup>
+                                    <b:formGroup>
+                                        <p:outputLabel value="Total Hours" styleClass="font-weight-bold"/>
+                                        <div class="col-12 md:col-4">
+                                            <div class="ui-inputgroup">
+                                                <p:inputText  value="#{sharedBean.selectedRevision.totalHours}" 
+                                                             styleClass="form-control text-right font-weight-bold"      disabled="true" placeholder="0.00"/>
+                                                <div class="ui-inputgroup-addon">Hrs</div>
+                                            </div>
+                                        </div>
+                                    </b:formGroup>
+                                    <b:formGroup>
+                                        <p:outputLabel value="Sub Total" styleClass="font-weight-bold"/>
+                                        <div class="col-12 md:col-4">
+                                            <div class="ui-inputgroup">
+                                                <div class="ui-inputgroup-addon">R</div>
+                                                <p:inputText value="#{sharedBean.selectedRevision.subtotalFee}" 
+                                                             disabled="true" placeholder="Price"/>
+                                            </div>
+                                        </div>
+                                    </b:formGroup>
+                                </b:panelGrid>
+                                <b:panelGrid colSpans="4,8" size="lg" styleClass="ui-fluid">
+                                    <b:formGroup>
+                                        <!-- Empty column for layout -->
+                                    </b:formGroup>
+                                    <b:formGroup>
+                                        <p:outputLabel value="Travel Expense"/>
+                                        <div class="col-12 md:col-4">
+                                            <div class="ui-inputgroup">
+                                                <div class="ui-inputgroup-addon">R</div>
+                                                <p:inputText  readonly="true" value="#{sharedBean.selectedRevision.travelExp}">
+                                                </p:inputText>
+                                            </div>
+                                        </div>
+                                    </b:formGroup>
+                                </b:panelGrid>
+                                <b:panelGrid colSpans="4,8" size="lg" styleClass="ui-fluid">
+                                    <b:formGroup>
+                                    </b:formGroup>
+                                    <b:formGroup>
+                                        <p:outputLabel value="External Resource"/>
+                                        <div class="col-12 md:col-4">
+                                            <div class="ui-inputgroup">
+                                                <div class="ui-inputgroup-addon">R</div>
+                                                <p:inputText readonly="true" value="#{sharedBean.selectedRevision.externalResource}"/>
+                                            </div>
+                                        </div>
+                                    </b:formGroup>
+                                </b:panelGrid>
+                                <b:panelGrid colSpans="4,2,6" size="lg" styleClass="ui-fluid">
+                                    <b:formGroup>
+                                        <!-- Empty column for layout -->
+                                    </b:formGroup>
+                                    <b:formGroup>
+                                        <p:outputLabel value="Time To Complete" styleClass="font-weight-bold text-muted"/>
+                                        <div class="col-12 md:col-4">
+                                            <div class="ui-inputgroup">
+                                                <p:inputText   readonly="true" value="#{sharedBean.selectedRevision.daysToComplete}"/>
+                                                <div class="ui-inputgroup-addon">Days</div>
+                                            </div>
+                                        </div>
+                                    </b:formGroup>
+                                    <b:formGroup>
+                                        <p:outputLabel value="Grand Total" styleClass="font-weight-bold"/>
+                                        <div class="col-12 md:col-4">
+                                            <div class="ui-inputgroup">
+                                                <div class="ui-inputgroup-addon">R</div>
+                                                <p:inputText  value="#{sharedBean.selectedRevision.grandTotal}" 
+                                                             styleClass="form-control text-right font-weight-bold"    disabled="true" placeholder="Price">
+                                                    <f:convertNumber type="currency" currencySymbol="R"/>
+                                                </p:inputText>
+                                            </div>
+                                        </div>
+                                    </b:formGroup>
+                                </b:panelGrid>
+                                <p:separator/>
+
+                                <b:panelGrid colSpans="4,4,4" size="lg" styleClass="ui-fluid">
+                                    <b:formGroup>
+                                        <p:outputLabel value="Deposit Details"/>
+                                    </b:formGroup> 
+                                    <b:formGroup>
+                                        <p:outputLabel value="Deposit Percentage"/>
+                                        <div class="col-12 md:col-4">
+                                            <div class="ui-inputgroup">
+                                                <p:inputText value="20" disabled="true" placeholder="Price"/>
+                                                <div class="ui-inputgroup-addon">%</div>
+                                            </div>
+                                        </div>
+                                    </b:formGroup>
+                                    <b:formGroup>
+                                        <p:outputLabel value="Deposit Amount"/>
+                                        <div class="col-12 md:col-4">
+                                            <div class="ui-inputgroup">
+                                                <div class="ui-inputgroup-addon">R</div>
+                                                <p:inputText  value="#{sharedBean.selectedRevision.depositAmount}" 
+                                                             disabled="true" placeholder="Price">
+                                                    <f:convertNumber type="currency" currencySymbol="R"/>
+                                                </p:inputText>
+                                            </div>
+                                        </div>
+                                    </b:formGroup>
+                                </b:panelGrid>
+                            </b:panelGrid>
+                        </b:panel> 
+                    </b:panelGrid> 
+                </p:tab> 
+            </b:panel>
+        </b:panel>
+    </ui:component>
+</html>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html">
+    <ui:component>
+        <b:panel look="default" collapsible="false">
+            <p:dataTable value="#{sharedBean.entity.supportingDocuments}" lazy="false" var="attachment" paginator="true" paginatorAlwaysVisible="false" reflow="true" rows="10">
+                <p:column headerText="Description">
+                    <h:outputText value="#{attachment.description}"/>
+                </p:column>
+                <p:column headerText="Size">
+                    <h:outputText value="#{attachment.documentSize} MB"/>
+                </p:column>
+                <p:column headerText="Action" styleClass="large">
+                    <p:commandButton  styleClass="ui-button-primary btn-size-sm" rendered="true" title="Download" icon="fa fa-fw fa-download" actionListener="#{sharedBean.fileDownload(attachment)}"  ajax="false" immediate="true">
+                        <p:fileDownload value="#{sharedBean.downloadFile}"/>
+                    </p:commandButton>
+                </p:column>
+            </p:dataTable>
+        </b:panel>
+    </ui:component>
+</html>
+

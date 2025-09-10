@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/XHtml.xhtml to edit this template
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html">
+    <ui:component>
+       
+            <b:panel id="summaryPanel" look="default" collapsible="false" style="font-size: 14px !important;">
+                <b:panel title="Application details" look="primary" collapsible="false">
+                    <p:panelGrid columns="4" styleClass="ui-panelgrid-blank" style="width:100%;">
+                        <h:outputLabel value="Tax Ref Number:" styleClass="no-bg"/>
+                        <h:outputText value="#{sharedBean.entity.incomeTaxReference}" styleClass="no-bg"/>
+                        <h:outputLabel value="ATR Reference Number:" styleClass="no-bg"/>
+                        <h:outputText value="#{sharedBean.entity.caseNum}" styleClass="no-bg"/>
+
+                        <h:outputLabel value="Application Status:" styleClass="no-bg"/>
+                        <h:outputText value="#{sharedBean.entity.status.toString()}" styleClass="no-bg"/>
+                        <h:outputLabel value="Status comment:" styleClass="no-bg"/>
+                        <h:outputText value="#{sharedBean.entity.status.toString()}" styleClass="no-bg"/>
+
+                    </p:panelGrid>
+                </b:panel>
+                <b:panel title="Applicant Details" look="primary" collapsible="false">
+                    <p:panelGrid columns="4" styleClass="ui-panelgrid-blank" style="width:100%;">
+                        <h:outputLabel value="Applicant Name:" styleClass="no-bg"/>
+                        <h:outputText value="#{sharedBean.entity.applicantName}" styleClass="no-bg"/>
+                        <h:outputLabel value="Applicant Type:" styleClass="no-bg"/>
+                        <h:outputText value="#{sharedBean.entity.representativeType.toString()}" styleClass="no-bg"/>
+
+                        <h:outputLabel value="Resident of the Republic:" styleClass="no-bg"/>
+                        <h:outputText value="#{sharedBean.entity.saResident.toString()}" styleClass="no-bg"/>
+                        <h:outputLabel value="Is SMME or Natural Person:" styleClass="no-bg"/>
+                        <h:outputText value="#{sharedBean.naturalPerson}" styleClass="no-bg"/>
+                    </p:panelGrid>
+                </b:panel>
+                <b:panel title="Representative / Third Party Contact Details" look="primary" collapsible="false">
+                    <p:panelGrid columns="4" styleClass="ui-panelgrid-blank" style="width:100%;">
+                        <h:outputLabel value="Name:" styleClass="no-bg"/>
+                        <h:outputText value="#{sharedBean.userDetail.fullName}" styleClass="no-bg"/>
+                        <h:outputLabel value="Cellphone:" styleClass="no-bg"/>
+                        <h:outputText value="#{sharedBean.userDetail.cellphone}" styleClass="no-bg"/>
+
+                        <h:outputLabel value="Capacity:" styleClass="no-bg"/>
+                        <h:outputText value="#{sharedBean.entity.representativeType.toString()}" styleClass="no-bg"/>
+                        <h:outputLabel value="Landline:" styleClass="no-bg"/>
+                        <h:outputText value="#{sharedBean.userDetail.telephone}" styleClass="no-bg"/>
+
+                        <h:outputLabel value="Email Address:" styleClass="no-bg"/>
+                        <h:outputText value="#{sharedBean.userDetail.emailAddress}" styleClass="no-bg"/>
+                        <h:outputText value="" styleClass="no-bg"/>
+                    </p:panelGrid>
+                </b:panel>
+                <b:panel title="eFiler Contact Details" look="primary" collapsible="false">
+                    <p:panelGrid columns="4" styleClass="ui-panelgrid-blank" style="width:100%;">
+                        <h:outputLabel value="Name:" styleClass="no-bg"/>
+                        <h:outputText value="#{sharedBean.userDetail.fullName}" styleClass="no-bg"/>
+                        <h:outputLabel value="ID/Passport Number:" styleClass="no-bg"/>
+                        <h:outputText rendered="#{sharedBean.userDetail.passPortNumber eq null}" value="#{sharedBean.userDetail.idNumber}" styleClass="no-bg"/>
+                        <h:outputText rendered="#{sharedBean.userDetail.passPortNumber ne null}" value="#{sharedBean.userDetail.passPortNumber}" styleClass="no-bg"/>
+
+                        <h:outputLabel value="Cellphone:" styleClass="no-bg"/>
+                        <h:outputText value="#{sharedBean.userDetail.cellphone}" styleClass="no-bg"/>
+                        <h:outputText value="" styleClass="no-bg"/>
+                    </p:panelGrid>
+                </b:panel>
+            </b:panel>
+       
+    </ui:component>
+</html>

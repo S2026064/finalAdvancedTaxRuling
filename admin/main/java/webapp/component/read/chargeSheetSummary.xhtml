@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/XHtml.xhtml to edit this template
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html">
+    <ui:component>
+
+        <b:panel id="chargesummaryPanel" look="default" collapsible="false" style="font-size: 14px !important;">
+            <b:panel title="Application details" look="primary" collapsible="false">
+                <p:panelGrid columns="4" styleClass="ui-panelgrid-blank" style="width:100%;">
+
+                    <h:outputLabel value="ATR Reference Number:" styleClass="no-bg"/>
+                    <h:outputText value="#{sharedBean.selectedATRApplication.caseNum}" styleClass="no-bg"/>
+                    <h:outputLabel value="Allocated Manager:" styleClass="no-bg"/>
+                    <h:outputText value="#{sharedBean.userDetail.fullName}" styleClass="no-bg"/>
+
+                    <h:outputLabel value="Application Status:" styleClass="no-bg"/>
+                    <h:outputText value="#{sharedBean.selectedATRApplication.status.toString()}" styleClass="no-bg"/>
+                    <h:outputLabel value="Last Timesheet close date:" styleClass="no-bg"/>
+                    <h:outputText  styleClass="no-bg"/>
+
+                </p:panelGrid>
+            </b:panel>
+            <b:panel title="Applicant " look="primary" collapsible="false">
+                <p:panelGrid columns="4" styleClass="ui-panelgrid-blank" style="width:100%;">
+                    <h:outputLabel value="Applicant Name:" styleClass="no-bg"/>
+                    <h:outputText value="#{sharedBean.selectedATRApplication.applicantName}" styleClass="no-bg"/>
+                </p:panelGrid>
+            </b:panel>
+        </b:panel>
+
+    </ui:component>
+</html>

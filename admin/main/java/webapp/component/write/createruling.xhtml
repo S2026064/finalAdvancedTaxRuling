@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/XHtml.xhtml to edit this template
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:o="http://omnifaces.org/ui">
+    <ui:component>
+
+        <b:panel look="default" collapsible="false">
+            <b:panelGrid colSpans="12" styleClass="ui-fluid">
+                <b:panel look="primary" title="Ruling detail" collapsible="false" rendered="#{sharedBean.entity.status eq 'SANITISED_RULING_ACCEPTED' or sharedBean.entity.status eq 'RULING_REJECTED' }">
+                    <p:fieldset legend="Validity period">
+                        <p:outputLabel value="This ruling is valid:"/>
+                        <b:panelGrid colSpans="3,3,3,3" styleClass="ui-fluid">
+                            <b:formGroup>
+                                <p:outputLabel value="for a period of"/>
+                                <p:inputText placeholder="Enter validity period in years" value="#{sharedBean.entity.validityDetail.validityPeriodYears}" type="number"/>
+                            </b:formGroup>
+                            <b:formGroup>
+                                <p:outputLabel value="years from"/> 
+                                <p:datePicker value="#{sharedBean.entity.validityDetail.validityStartDate}"/> 
+                            </b:formGroup>
+                            <b:formGroup>
+                                <p:outputLabel value="for"/> 
+                                <p:inputText placeholder="Validity description" value="#{sharedBean.entity.validityDetail.validityDescription}"/> 
+                            </b:formGroup>
+                            <b:formGroup>
+                                <p:outputLabel value="in respect of the year assessment"/> 
+                                <p:inputText placeholder="current assessment year" value="#{sharedBean.entity.validityDetail.validityAssessmentYear}" type="number"/> 
+                            </b:formGroup>
+                            <b:formGroup>
+                                <p:outputLabel value="in respect of the year assessment ending"/> 
+                                <p:inputText placeholder="assessment end year" value="#{sharedBean.entity.validityDetail.validityAssessmentYear}"/>
+                            </b:formGroup>
+                        </b:panelGrid>
+                    </p:fieldset>
+                    <p:fieldset legend="Act">
+                        <b:formGroup>
+                            <p:outputLabel value="Choose Act"/>
+                            <b:selectOneMenu value="#{sharedBean.selectedTaxAct}" required="true" converter="entityConverter" requiredMessage="Please select an act">
+                                <f:selectItem itemLabel="Select One"  noSelectionOption="true"/>
+                                <f:selectItems value="#{sharedBean.taxActList}" var="act" itemLabel="#{act.toString()}" itemValue="#{act}"/>
+                                <f:ajax listener="#{sharedBean.onActSelection}" render="actSectionsPickList" />
+                            </b:selectOneMenu>
+                        </b:formGroup>
+                        
+                        <p:pickList id="actSectionsPickList"
+                                    value="#{sharedBean.actSectionsPickList}" 
+                                    var="section" 
+                                    itemLabel="#{section.description}" 
+                                    itemValue="#{section}"
+                                    converter="entityConverter"
+                                    transferOnCheckboxClick="true"
+                                    showCheckbox="true"
+                                     responsive="true"
+                                    showSourceControls="false"
+                                    showTargetControls="false"
+                                    style="font-size: 13px;">
+                            <f:facet name="sourceCaption">
+                                <span style="font-size: 12px; font-weight: bold;">Act sections</span>
+                            </f:facet>
+                            <f:facet name="targetCaption">
+                                <span style="font-size: 12px; font-weight: bold;">Selected sections</span>
+                            </f:facet>
+                            <f:ajax event="transfer" listener="sharedBean.onActSectionTransfer" />
+
+                        </p:pickList>
+
+                        <b:formGroup>
+                            <p:outputLabel for="rulingTypeRadio" value="Type of ruling"/>
+                            <p:selectOneRadio id="rulingTypeRadio" value="#{sharedBean.entity.validityDetail.validityRulingType}" layout="lineDirection" converter="entityConverter">
+                                <f:selectItems value="#{sharedBean.validityRulingTypes}" var="validityRulingType"
+                                               itemValue="#{validityRulingType}" itemLabel="#{validityRulingType.toString()}" />
+                            </p:selectOneRadio>
+                        </b:formGroup>
+                    </p:fieldset>
+
+                </b:panel>
+
+                <b:panel look="primary" title="Upload Draft Ruling document" collapsible="false" rendered="#{sharedBean.entity.status eq 'ESTIMATE_ACCEPTED_PENDING_DOCUMENTATION' or sharedBean.entity.status eq 'DRAFT_RULING_REJECTED'}">
+                    <p:fileUpload onstart="PF('blockUI').block()" listener="#{sharedBean.handleFileUpload}"   oncomplete="PF('blockUI').unblock()"   auto="true"  mode="advanced" dragDropSupport="false"  update="tabView:attach" sizeLimit="8000000" fileLimit="3" allowTypes="/(\.|\/)(gif|jpe?g|png|pdf|doc|docx|xls|xlsx|xlsm|mp4|avi|flv|mkv|wmv|mov)$/i"/>
+                </b:panel>
+                <b:panel look="primary" title="Upload Sanitised Ruling document" collapsible="false" rendered="#{sharedBean.entity.status eq 'DRAFT_RULING_ACCEPTED' or sharedBean.entity.status eq 'SANITISED_RULING_REJECTED'}">
+                    <p:fileUpload onstart="PF('blockUI').block()" listener="#{sharedBean.handleFileUpload}"   oncomplete="PF('blockUI').unblock()"   auto="true"  mode="advanced" dragDropSupport="false"  update="tabView:attach" sizeLimit="8000000" fileLimit="3" allowTypes="/(\.|\/)(gif|jpe?g|png|pdf|doc|docx|xls|xlsx|xlsm|mp4|avi|flv|mkv|wmv|mov)$/i"/>
+                </b:panel>
+                <b:panel look="primary" title="Upload Final Ruling document" collapsible="false" rendered="#{sharedBean.entity.status eq 'SANITISED_RULING_ACCEPTED' or sharedBean.entity.status eq 'RULING_REJECTED' }">
+                    <p:fileUpload onstart="PF('blockUI').block()" listener="#{sharedBean.handleFileUpload}"   oncomplete="PF('blockUI').unblock()"   auto="true"  mode="advanced" dragDropSupport="false" process="@this" update="tabView:attach" sizeLimit="8000000" fileLimit="3" allowTypes="/(\.|\/)(gif|jpe?g|png|pdf|doc|docx|xls|xlsx|xlsm|mp4|avi|flv|mkv|wmv|mov)$/i"/>
+                </b:panel>
+                <p:outputPanel id="attach">
+                    <p:separator rendered="true"/>  
+                    <b:panel look="primary" title="List of documents" collapsible="false">
+                        <b:panelGrid colSpans="2,3,3,2,2" size="lg" styleClass="ui-fluid">
+                            <p:outputLabel value="Date"/>
+                            <p:outputLabel value="Description"/>
+                            <p:outputLabel value="Document Type"/>
+                            <p:outputLabel value="Size"/>
+                            <p:outputLabel value="Action"/>
+                        </b:panelGrid>                    
+                        <p:separator/>
+                        <ui:repeat value="#{sharedBean.entity.supportingDocuments}" var="document" varStatus="documentVarStatus">
+                            <b:panelGrid colSpans="2,3,3,2,2" size="lg" styleClass="ui-fluid" rendered="#{document.documentType ne 'FEEDBACK'}">
+                                <b:formGroup>
+                                    <h:outputText value="#{document.createdDate}" styleClass="customCSS">
+                                        <f:convertDateTime   pattern="dd MMMM yyyy"/>
+                                    </h:outputText>
+                                </b:formGroup>
+                                <b:formGroup>
+                                    <h:outputText value="#{document.description}" styleClass="customCSS"/>
+                                </b:formGroup>
+                                <b:formGroup>
+                                    <h:outputText value="#{document.documentType.toString()}" styleClass="customCSS"/> 
+                                </b:formGroup>
+                                <b:formGroup>
+                                    <h:outputText value="#{document.documentSize}" styleClass="customCSS"/>
+                                </b:formGroup>
+                                <b:formGroup>
+                                    <b:panelGrid colSpans="6,6" size="lg" styleClass="ui-fluid">
+                                        <p:commandButton    styleClass="btn-size-sm"  value="Download" actionListener="#{sharedBean.fileDownload(document)}"  ajax="false" immediate="true"  update="@form">
+                                            <p:fileDownload  value="#{sharedBean.downloadFile}"/>
+                                        </p:commandButton>
+                                        <p:commandButton styleClass="ui-button-danger btn-size-sm"  value="Delete" action="#{sharedBean.deleteDocument(document)}"  immediate="true" update="@form"/>
+                                    </b:panelGrid>
+                                </b:formGroup>
+                            </b:panelGrid>
+                            <p:separator rendered="#{document.documentType ne 'FEEDBACK'}"/> 
+                        </ui:repeat>
+                    </b:panel>
+
+                </p:outputPanel>
+            </b:panelGrid>
+            <f:facet name="footer">
+                <b:row>
+                    <b:panelGrid colSpans="4,4,4" size="lg" styleClass="ui-fluid">
+                        <b:commandButton large-screen="full-width" size="lg" value="Submit" action="#{sharedBean.submit(sharedBean.entity)}" icon="check" look="success" update="@form" />
+                        <b:commandButton large-screen="full-width" size="lg"  value="Feedback" action="#{sharedBean.addFeedback(sharedBean.entity)}" immediate="true" update="@form" icon="envelope" look="primary" />
+                        <b:commandButton large-screen="full-width" size="lg"  value="Cancel" icon="remove" action="#{sharedBean.cancel(sharedBean.entity)}"  look="danger"  immediate="true" update="@form" />
+                    </b:panelGrid>
+                </b:row>
+            </f:facet>
+        </b:panel>
+    </ui:component>
+</html>

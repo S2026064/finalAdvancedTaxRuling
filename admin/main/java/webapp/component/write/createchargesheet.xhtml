@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/XHtml.xhtml to edit this template
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:o="http://omnifaces.org/ui">
+    <ui:component>
+
+        <b:panel look="default" collapsible="false">
+            <ui:repeat value="#{sharedBean.entriesByCategory.entrySet()}" var="entry" varStatus="loop">
+
+                <p:dataTable id="tblSales_#{loop.index}" 
+                             value="#{entry.value}" 
+                             var="item" 
+                             styleClass="p-datatable-gridlines chargesheet-td-readonly"
+                             rowStyleClass="item-row">
+                    <p:columnGroup type="header">
+                        <p:row>
+                            <p:column headerText="#{entry.key.toString()}" rowspan="2" style="color: #004999; font-weight: bold;text-align: center !important;"/>
+                            <p:column headerText="Estimated" colspan="2" style="color: #004999; font-weight: bold;text-align: center !important;"/>
+                            <p:column headerText="Invoice" rowspan="1" style="color: #004999; font-weight: bold;text-align: center !important;"/>
+                            <p:column headerText="Balance" rowspan="2" style="color: #004999; font-weight: bold;text-align: center !important;"/>
+                            <p:column headerText="This Period" colspan="2" style="color: #004999; font-weight: bold; text-align: center !important;"/>
+                            <p:column headerText="Invoice" rowspan="1" style="color: #004999; font-weight: bold;text-align: center !important;"/>
+                        </p:row>
+                        <p:row>
+                            <p:column headerText="Hrs" style="color: #004999; font-weight: bold;text-align: center !important;"/>
+                            <p:column headerText="Amount" style="color: #004999; font-weight: bold;text-align: center !important;"/>
+                            <p:column headerText="to Date" style="color: #004999; font-weight: bold;text-align: center !important;"/>
+                            <p:column headerText="Hrs" style="color: #004999; font-weight: bold;text-align: center !important;"/>
+                            <p:column headerText="Amount" style="color: #004999; font-weight: bold;text-align: center !important;"/>
+                            <p:column headerText=" Total" style="color: #004999; font-weight: bold;text-align: center !important;"/>
+                        </p:row>
+                    </p:columnGroup>
+
+
+                    <p:column>
+                        <h:outputText value="#{item.activity.description}" style="color: green; font-weight: bold;" />
+                    </p:column>
+
+                    <p:column>
+                        <p:inputNumber value="#{item.estimatedHours}"  />
+                    </p:column>
+
+                    <p:column>
+                        <p:inputNumber value="#{item.estimatedAmount}" disabled="true" styleClass="chargesheet-td-readonly"/>
+                    </p:column>
+
+                    <p:column>
+                        <p:inputNumber value="#{item.invoiceToDate}" />
+                    </p:column>
+
+                    <p:column>
+                        <p:inputNumber value="#{item.balance}" disabled="true" styleClass="chargesheet-td-readonly"/>
+                    </p:column>
+
+                    <p:column>
+                        <p:inputNumber value="#{item.thisPeriodHours}" />
+                    </p:column>
+
+                    <p:column>
+                        <p:inputNumber value="#{item.thisPeriodAmount}" disabled="true" styleClass="chargesheet-td-readonly"/>
+                    </p:column>
+
+                    <p:column>
+                        <p:inputNumber value="#{item.invoiceTotal}" disabled="true" styleClass="chargesheet-td-readonly"/>
+                    </p:column>
+
+
+                </p:dataTable>
+            </ui:repeat>
+            <b:panelGrid colSpans="6,6" size="lg" styleClass="ui-fluid">
+                <b:formGroup>
+                </b:formGroup>
+                <b:formGroup>
+                    <p:outputLabel value="Sub-Total" styleClass="font-weight-bold"/>
+                    <div class="col-12 md:col-4">
+                        <div class="ui-inputgroup">
+                            <div class="ui-inputgroup-addon">R</div>
+                            <p:inputText  value="#{sharedBean.entity.grandTotal - (sharedBean.entity.travelExp + sharedBean.entity.externalResource)}" 
+                                          styleClass="form-control text-right font-weight-bold" disabled="true" placeholder="Price">
+                                <f:convertNumber type="currency" currencySymbol="R"/>
+                            </p:inputText>
+                        </div>
+                    </div>
+                </b:formGroup>
+            </b:panelGrid>
+            <b:panelGrid colSpans="6,6" size="lg" styleClass="ui-fluid">
+                <b:formGroup>
+                </b:formGroup>
+                <b:formGroup>
+                    <p:outputLabel value="Travel Expense"/>
+                    <div class="col-12 md:col-4">
+                        <div class="ui-inputgroup">
+                            <div class="ui-inputgroup-addon">R</div>
+                            <p:inputText value="#{sharedBean.entity.travelExp}">
+                                <f:convertNumber type="currency"/>
+                            </p:inputText>
+                        </div>
+                    </div>
+                </b:formGroup>
+            </b:panelGrid>
+            <b:panelGrid colSpans="6,6" size="lg" styleClass="ui-fluid">
+                <b:formGroup>
+                </b:formGroup>
+                <b:formGroup>
+                    <p:outputLabel value="External Resource"/>
+                    <div class="col-12 md:col-4">
+                        <div class="ui-inputgroup">
+                            <div class="ui-inputgroup-addon">R</div>
+                            <p:inputText value="#{sharedBean.entity.externalResource}">
+                                <f:convertNumber type="currency"/>
+                            </p:inputText>
+                        </div>
+                    </div>
+                </b:formGroup>
+            </b:panelGrid>
+            <b:panelGrid colSpans="6,6" size="lg" styleClass="ui-fluid">
+                <b:formGroup>
+                </b:formGroup>
+                <b:formGroup>
+                    <p:outputLabel value="Grand Total" styleClass="font-weight-bold"/>
+                    <div class="col-12 md:col-4">
+                        <div class="ui-inputgroup">
+                            <div class="ui-inputgroup-addon">R</div>
+                            <p:inputText  value="#{sharedBean.entity.grandTotal}" 
+                                          styleClass="form-control text-right font-weight-bold" disabled="true" placeholder="Total">
+                                <f:convertNumber type="currency" currencySymbol="R"/>
+                            </p:inputText>
+                        </div>
+                    </div>
+                </b:formGroup>
+            </b:panelGrid>
+            <f:facet name="footer">
+                <b:row>
+                    <b:panelGrid colSpans="4,4,4" size="lg" styleClass="ui-fluid">
+                        <b:commandButton large-screen="full-width" size="lg" value="Save"  icon="check" look="success" update="@form" />
+                        <b:commandButton large-screen="full-width" size="lg"  value="Submit" action="#{sharedBean.submit(sharedBean.entity)}"  update="@form" icon="check" look="primary" />
+                        <b:commandButton large-screen="full-width" size="lg"  value="Cancel" icon="remove"   look="danger"  immediate="true" update="@form" />
+                    </b:panelGrid>
+                </b:row>
+            </f:facet>
+        </b:panel>
+    </ui:component>  
+</html>

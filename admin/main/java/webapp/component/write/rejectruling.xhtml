@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/XHtml.xhtml to edit this template
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <ui:component>
+        <b:panel look="default" collapsible="false" id="confirmWithdrawalPanel">
+            <b:panelGrid colSpans="12" styleClass="ui-fluid">
+                <b:panel look="primary" title="Add a rejection reason" collapsible="false" id="reasonPanel">           
+                    <b:growl id="withdrawalMessages" showDetail="true" showSummary="false" allowDismiss="true" placementAlign="center" for="withdrawReasonInput"/>
+                    <b:inputTextarea value="#{sharedBean.comment}" required="true" id="withdrawReasonInput" requiredMessage="Please add rejection reason" rows="6"/>
+                </b:panel>
+            </b:panelGrid>
+            <b:fetchBeanInfos />
+            <f:facet name="footer">
+                <b:row>
+                    <b:panelGrid colSpans="6,6" size="lg" styleClass="ui-fluid">
+                        <b:commandButton large-screen="full-width" size="lg" value="Submit" action="#{sharedBean.rejectRuling(sharedBean.entity)}" process="withdrawReasonInput" look="success" update="@form: withdrawDialog" icon="check" ajax="true"
+                                          oncomplete="if(validationFailed) PF('withdrawDialog').show(); else PF('withdrawDialog').hide();$('.ui-widget-overlay').remove();"/>
+                        <b:commandButton large-screen="full-width" size="lg" value="Cancel" icon="remove" look="danger" immediate="true" type="button" onclick="PF('withdrawDialog').hide();$('.ui-widget-overlay').remove();"/>
+                    </b:panelGrid>
+                </b:row>
+            </f:facet>
+        </b:panel>
+    </ui:component>
+</html>
+

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/XHtml.xhtml to edit this template
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:o="http://omnifaces.org/ui">
+    <ui:component>
+        <b:panel id="estimatedHistoryPanel" look="default" collapsible="false" style="font-size: 14px !important;">
+            <b:panel rendered="#{sharedBean.add}" look="default" collapsible="false" styleClass="ui-fluid">
+                <f:facet name="heading">
+                    <b:panelGrid colSpans="12" size="lg" styleClass="ui-fluid">
+                        <p:outputLabel value="Estimation Plan History" styleClass="panel-title-css"/>
+                    </b:panelGrid>
+                </f:facet>
+                <p:dataTable value="#{sharedBean.entity.estimationPlans}" var="estimateplan" paginator="true" paginatorAlwaysVisible="false" reflow="true" rows="10">                
+                    <f:facet name="header">                          
+                        <p:toolbar>
+                            <p:toolbarGroup>
+                                <p:commandButton styleClass="ui-button-primary btn-size-lg" style="width:30rem"  icon="plus" value="Add Estimate Plan" action="#{sharedBean.addOrUpdateEstimatePlan(null,'estimatepopup')}" process="@this" update="@namingcontainer" >
+                                    <p:ajax event="dialogReturn" listener="#{sharedBean.handleAddEstimatePlanReturnListener}" update="@namingcontainer messages"/>
+                                </p:commandButton>
+                            </p:toolbarGroup>
+                        </p:toolbar>
+                    </f:facet>
+                    <p:column headerText="Date">
+                        <h:outputText value="#{estimateplan.createdDate}">
+                            <f:convertDateTime pattern="dd/MM/yyyy"/>
+                        </h:outputText>
+                    </p:column> 
+                    <p:column headerText="Status">
+                        <h:outputText value="#{estimateplan.status.toString()}"/>
+                    </p:column> 
+                    <p:column headerText="Working Days">
+                        <h:outputText value="#{estimateplan.daysToComplete}"/>
+                    </p:column> 
+                    <p:column headerText="Total Amount">
+                        <h:outputText value="#{estimateplan.grandTotal}">
+                            <f:convertNumber type="currency" currencySymbol="R"/>
+                        </h:outputText>
+                    </p:column> 
+                    <p:column headerText="Estimation %">
+                        <h:outputText value="#{estimateplan.depositPercentage *100}"/>
+                    </p:column>
+                    <p:column headerText="Estimation Amount">
+                        <h:outputText value="#{estimateplan.depositAmount}">
+                            <f:convertNumber type="currency" currencySymbol="R"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="Action" styleClass="xlarge">
+                        <p:commandButton rendered="#{estimateplan.planType  eq 'ACTIVE'}" styleClass="ui-button-primary btn-size-sm"  icon="pencil" value="Edit" action="#{sharedBean.addOrUpdateEstimatePlan(estimateplan,'estimatepopup')}" process="@this" update="@namingcontainer">
+                            <p:ajax event="dialogReturn" listener="#{sharedBean.handleUpdateEstimatePlanReturnListener}" update="@namingcontainer" />
+                        </p:commandButton>
+                        <p:commandButton rendered="#{estimateplan.planType  eq 'NOT_ACTIVE'}" styleClass="ui-button-primary btn-size-sm"  icon="pencil" value="View" action="#{sharedBean.addOrUpdateEstimatePlan(estimateplan,'estimateplanview')}" process="@this" update="@namingcontainer">
+                            <p:ajax event="dialogReturn" listener="#{sharedBean.handleUpdateEstimatePlanReturnListener}" update="@namingcontainer" />
+                        </p:commandButton>
+                        <p:spacer width="5px"/>
+                        <p:commandButton rendered="#{estimateplan.planType  eq 'ACTIVE'}" styleClass="ui-button-danger btn-size-sm" value="Delete" icon="remove" action="#{sharedBean.removeEstimatePlan(estimateplan)}" update="@namingcontainer"/>
+                        
+                    </p:column>
+                </p:dataTable>
+            </b:panel>
+
+        </b:panel>
+    </ui:component>
+</html>

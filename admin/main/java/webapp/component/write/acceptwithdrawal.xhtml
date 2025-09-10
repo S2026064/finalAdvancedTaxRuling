@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/XHtml.xhtml to edit this template
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <ui:component>
+        <b:panel look="default" collapsible="false" >
+            <b:panelGrid colSpans="12" styleClass="ui-fluid">
+                <b:panel look="primary" title="Add a reason" collapsible="false" >           
+                    <b:inputTextarea value="#{sharedBean.comment}" required="true"  requiredMessage="Please add acceptence reason" rows="6"/>
+                </b:panel> 
+            </b:panelGrid>
+            <f:facet name="footer">
+                <b:row>
+                    <b:panelGrid colSpans="6,6" size="lg" styleClass="ui-fluid">
+                        <b:commandButton large-screen="full-width" size="lg" value="Submit" action="#{sharedBean.acceptWithdrawal(sharedBean.entity)}" icon="check" look="success" update="@form"/>              
+                        <b:commandButton large-screen="full-width" size="lg"  value="Cancel" icon="remove"  look="danger" type="reset" immediate="true" update="@form" />
+                    </b:panelGrid>
+                </b:row>
+            </f:facet>
+        </b:panel>
+    </ui:component>
+</html>
+

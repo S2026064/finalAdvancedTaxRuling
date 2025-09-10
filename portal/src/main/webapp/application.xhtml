@@ -1,0 +1,608 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:p="http://primefaces.org/ui">
+    <h:body>
+        <ui:composition template="/template/template.xhtml">
+            <ui:define name="maincontent">
+                <b:panel rendered="#{applicationBean.list}" look="default"  collapsible="false">
+                    <f:facet name="heading">
+                        <b:panelGrid colSpans="12" size="lg" styleClass="ui-fluid">
+                            <p:outputLabel value="Applications" styleClass="panel-title-css"/>
+                        </b:panelGrid>
+                    </f:facet>
+                    <p:dataTable rowIndexVar="rowIndex"  globalFilterOnly="true"  widgetVar="confirmationTable" value="#{applicationBean.collections}" var="app" paginator="true"  paginatorAlwaysVisible="false" reflow="true" rows="15">
+                        <f:facet name="header">                          
+                            <p:toolbar>
+                                <p:toolbarGroup>
+                                    <b:commandButton style="width:30rem" large-screen="full-width" action="#{applicationBean.addOrUpdate(null)}" iconSize="md" size="lg" icon="plus" look="primary" value="Add"  update="@form"/>
+                                </p:toolbarGroup>
+                                <p:toolbarGroup align="right">
+                                    <p:inputText placeholder="Filter by all fields" id="globalFilter" style="width:30rem" onkeyup="PF('applicationTable').filter()"/>
+                                </p:toolbarGroup>
+                            </p:toolbar>
+                        </f:facet>
+                        <p:column headerText="ATR ref. no.">
+                            <h:outputText value="#{app.caseNum}"/>
+                        </p:column>
+                        <p:column headerText="Applicant name">
+                            <h:outputText value="#{app.applicantName}"/>
+                        </p:column>
+                        <p:column headerText="Status">
+                            <h:outputText value="#{app.status.toString()}"/>
+                        </p:column>
+                        <p:column headerText="Date">
+                            <h:outputText value="#{app.createdDate}">
+                                <f:convertDateTime  pattern="dd MMMM yyyy"/>
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="Ruling Type">
+                            <h:outputText value="#{app.rulingType.toString()}"/>
+                        </p:column>
+                        <p:column headerText="Action" styleClass="large">
+                            <p:commandButton styleClass="ui-button-raised ui-button-primary btn-size-sm" disabled="#{app.status ne 'SAVED'}" value="Edit" action="#{applicationBean.addOrUpdate(app)}"  update="@form"/>
+                            <p:spacer width="5px"/>
+                            <p:commandButton styleClass="ui-button-raised ui-button-danger btn-size-sm" value="Delete" action="#{applicationBean.delete(app)}" disabled="#{app.status ne 'SAVED'}" update="@form">
+                                <p:confirm  header="Confirmation" message="Do you really want to delete this record" icon="pi pin-info-circle"/>
+                            </p:commandButton>
+                        </p:column>     
+                    </p:dataTable>
+                </b:panel>
+                <b:panel rendered="#{applicationBean.add}" look="default" collapsible="false" title="Online application for an Advanced Tax Ruling">
+                    <f:facet name="heading">
+                        <b:panelGrid colSpans="12" size="lg" styleClass="ui-fluid">
+                            <p:outputLabel  styleClass="panel-title-css"/>
+                        </b:panelGrid>
+                    </f:facet>
+                    <p:tabView id="tabView" activeIndex="#{applicationBean.tabIndex}">
+
+                        <p:tab id="screening" title="Pre-screening" disabled="#{applicationBean.tabIndex != 0}">
+                            <b:panel look="default" collapsible="false" >
+                                <b:panel look="primary" title="Questions" collapsible="false">
+                                    <p style="font-size: 15px; font-weight: bold">All the following questions need to be answered before you can continue</p>
+                                    <ui:repeat value="#{applicationBean.applicationQuestions}" var="response" varStatus="screeningVarStatus">
+                                        <b:panelGrid colSpans="10,2" size="md" rendered="#{response.question.questionType eq 'PRE_SCREENING'}" styleClass="ui-fluid" style="font-size: 14px;margin-bottom: 15px">
+                                            <p:column styleClass="xlarge"  style="box-sizing:border-box">
+                                                <h:outputText value="#{response.question.description}" style="#{applicationBean.isSubQuestion(response.question.description) ? 'padding-left:20px':''}"/>
+                                                <h:panelGroup id="tooltipIcon" layout="inline" style="margin-left:5px;" rendered="#{response.question.questionDetail.trim() ne ''}">
+                                                    <i class="pi pi-info-circle" style="font-size: 1rem; color: #007ad9; cursor: help;"></i>
+                                                </h:panelGroup>
+
+                                                <p:tooltip for="tooltipIcon" value="#{response.question.questionDetail}" styleClass="custom-tooltip" />
+                                            </p:column> 
+                                            <p:column styleClass="md"  rendered="#{response.question.questionDetail.trim() ne ''}">
+                                                <p:selectOneRadio value="#{response.responseOption}"  converter="entityConverter" required="true" requiredMessage="Please select an option" >
+                                                    <f:selectItems value="#{applicationBean.responsesList}" />
+                                                </p:selectOneRadio>
+                                            </p:column>
+                                        </b:panelGrid>
+                                    </ui:repeat>
+                                </b:panel>
+
+                                <!--<b:label value="Terms and Conditions" style="font-size: 15px"/>-->
+                                <b:panel look="primary" title="Terms and Conditions" collapsible="false">
+                                    <h:panelGrid columns="2" style="width:100%; font-size:14px;">
+                                        <h:panelGroup layout="block" style="display:inline-block; text-align:left;">
+                                            <p:selectBooleanCheckbox value="#{applicationBean.entity.termsAndConditions}" id="acceptTerms" required="true" requiredMessage="Please accept Terms and Conditions before you can continue"/>
+                                            <h:outputLabel for="acceptTerms" value="I accept the Terms and Conditions" style="margin-left:5px;font-weight: normal !important;"/>
+                                        </h:panelGroup>
+
+                                        <h:outputLink value="https://www.sars.gov.za/legal-counsel/interpretation-rulings/advance-tax-rulings-atr/" target="_blank"
+                                                      style="display:inline-block; font-weight: normal !important;text-align:left;">
+                                            Click here to view Terms and Conditions
+                                        </h:outputLink>
+                                    </h:panelGrid>
+
+                                </b:panel>
+                                <f:facet name="footer">
+                                    <p:toolbar>   
+                                        <p:toolbarGroup align="right">  
+                                            <b:commandButton large-screen="full-width" size="lg" value="Next" look="primary" icon="arrow-right" action="#{applicationBean.next(1)}" iconAlign="right"   update="@form" process="screening"/>  
+                                        </p:toolbarGroup>
+                                    </p:toolbar>
+
+                                    <b:row>
+                                        <b:panelGrid colSpans="6,6" size="lg" styleClass="ui-fluid">
+                                            <b:commandButton large-screen="full-width" size="lg" value="Save Application" action="#{applicationBean.save(applicationBean.entity)}"     icon="check" look="success"   immediate="true" update="@form" />
+                                            <b:commandButton large-screen="full-width" size="lg"  value="Cancel" icon="remove" action="#{applicationBean.cancel(applicationBean.entity)}" immediate="true" process="@this" look="danger" update="@form tabView"/>
+                                        </b:panelGrid>
+                                    </b:row>
+                                </f:facet>
+                            </b:panel>
+                        </p:tab>
+                        <p:tab id="appForm" title="Application form"  disabled="#{applicationBean.tabIndex != 1}">
+                            <b:panel look="default" collapsible="false" style="font-size: 14px;">
+                                <b:panelGrid colSpans="4,4,4"  size="lg" styleClass="ui-fluid" style="margin-top: 5px;">
+                                    <b:panel look="primary" title="I am applying for a:" collapsible="false" style="min-height:267px">
+                                        <b:formGroup>
+                                            <p:selectOneRadio style="font-size: 14px;" value="#{applicationBean.entity.rulingType}" layout="pageDirection"  converter="entityConverter" required="true" requiredMessage="Please select an option">
+                                                <f:selectItems value="#{applicationBean.rulingTypes}"/>
+                                            </p:selectOneRadio>
+                                        </b:formGroup>
+                                    </b:panel>
+                                    <b:panel look="primary" title="In my capacity as:" collapsible="false" style="min-height:267px">
+                                        <b:formGroup>
+                                            <p:selectOneRadio style="font-size: 14px;" value="#{applicationBean.entity.applicationType}" layout="pageDirection" converter="entityConverter" required="true" requiredMessage="Please select an option">
+                                                <f:selectItems value="#{applicationBean.applicationTypes}" />
+                                                <p:ajax event="change" update="practitioner"/>
+                                            </p:selectOneRadio>
+                                            <h:panelGroup id="practitioner" layout="block">
+                                                <b:formGroup  rendered="#{applicationBean.entity.applicationType.toString() eq 'on behalf of a third party/class'}">
+                                                    <p:outputLabel value="Tax practitioner number:"/>
+                                                    <p:inputText value="#{applicationBean.entity.taxPractitionerNumber}" type="number" placeholder="Enter practitioner number" required="true" requiredMessage="Enter tax practitioner number" />
+                                                </b:formGroup>
+                                            </h:panelGroup>
+                                        </b:formGroup>
+                                    </b:panel>
+                                    <b:panel look="primary" title="Subject of the ATR application" collapsible="false" style="font-weight:bold;min-height: 267px">
+                                        <b:formGroup>
+                                            <p:selectBooleanCheckbox itemLabel="Income Tax Act 58 of 1962" value="#{applicationBean.entity.taxType.incomeTaxAct}" />
+                                        </b:formGroup>
+
+                                        <b:formGroup>
+                                            <p:selectBooleanCheckbox itemLabel="Value Added Tax Act 89 of 1991" value="#{applicationBean.entity.taxType.vatTaxAct}"/>
+                                        </b:formGroup>
+
+                                        <b:formGroup>
+                                            <p:selectBooleanCheckbox itemLabel="Securities Transfer Tax Act 25 of 2007" value="#{applicationBean.entity.taxType.securitiesTransferTaxAct}" />
+                                        </b:formGroup>
+
+                                        <b:formGroup>
+                                            <p:selectBooleanCheckbox itemLabel="Transfer Duty Act 40 of 1949" value="#{applicationBean.entity.taxType.transferDutyAct}" />
+                                        </b:formGroup>
+                                    </b:panel>
+                                </b:panelGrid>
+
+                                <b:panelGrid colSpans="12"  size="lg" styleClass="ui-fluid">
+                                    <b:panel look="primary" title="My details are as follows:" collapsible="false">
+                                        <b:panelGrid colSpans="6,6"  size="lg" styleClass="ui-fluid">
+                                            <b:formGroup>
+                                                <p:outputLabel value="Name"/>
+                                                <p:inputText required="true" value="#{applicationBean.userDetail.fullName}" readonly="true"/>
+                                            </b:formGroup>
+                                            <b:formGroup>
+                                                <p:outputLabel value="Cellphone"/>
+                                                <p:inputText required="true" value="#{applicationBean.userDetail.cellphone}" type="tel" readonly="true"/>
+                                            </b:formGroup>
+                                            <b:formGroup>
+                                                <p:outputLabel value="Email"/>
+                                                <p:inputText required="true" value="#{applicationBean.userDetail.emailAddress}" type="email" readonly="true"/>
+                                            </b:formGroup>
+                                            <b:formGroup>
+                                                <p:outputLabel value="Telephone" />
+                                                <p:inputText required="true" value="#{applicationBean.userDetail.telephone}" type="tel" readonly="true"/>
+                                            </b:formGroup>
+                                        </b:panelGrid>
+                                    </b:panel>
+                                    <b:panel title="Applicant Information" look="primary" collapsible="false">
+                                        <b:panelGrid colSpans="6,6"  size="lg" styleClass="ui-fluid">
+                                            <b:formGroup>
+                                                <p:outputLabel value="Applicant name: " title="[this is the name that will be used/ refered to during the ruling application]" />
+                                                <p:inputText required="true" requiredMessage="Please enter the Applicant name" value="#{applicationBean.entity.applicantName}" />
+                                            </b:formGroup>
+                                            <b:formGroup>
+                                                <p:outputLabel value="Email Address"/>
+                                                <p:inputText required="true" requiredMessage="Please enter the Applicatn email address" value="#{applicationBean.entity.applicantEmail}" type="email"/>
+                                            </b:formGroup>
+                                        </b:panelGrid>
+                                        <p:fieldset legend="Business Address">
+                                            <b:panelGrid colSpans="6,6"  size="lg" styleClass="ui-fluid">
+                                                <b:formGroup>
+                                                    <p:outputLabel value="Street Number"/>
+                                                    <p:inputText required="true" type="number" requiredMessage="Please enter street number" value="#{applicationBean.entity.address.line2}" />
+                                                </b:formGroup>
+                                                <b:formGroup>
+                                                    <p:outputLabel value="Street Name"/>
+                                                    <p:inputText required="true" requiredMessage="Please enter street name" value="#{applicationBean.entity.address.line1}" />
+                                                </b:formGroup>
+                                                <b:formGroup>
+                                                    <p:outputLabel value="City"/>
+                                                    <p:inputText required="true"  requiredMessage="Please enter city" value="#{applicationBean.entity.address.line3}" />
+                                                </b:formGroup>
+                                                <b:formGroup>
+                                                    <p:outputLabel value="Province"/>
+                                                    <p:selectOneMenu  converter="entityConverter" value="#{applicationBean.entity.address.province}" required="true" requiredMessage="Please select province">
+                                                        <f:selectItem itemLabel="Select One"  noSelectionOption="true"/>
+                                                        <f:selectItems value="#{applicationBean.provinces}"  var="province" itemLabel="#{province.toString()}" itemValue="#{province}"/>
+                                                    </p:selectOneMenu>
+                                                </b:formGroup>
+                                                <b:formGroup>
+                                                    <p:outputLabel value="Code"/>
+                                                    <p:inputText required="true" requiredMessage="Please enter area code" value="#{applicationBean.entity.address.postalCode}" type="number"/>
+                                                </b:formGroup>
+                                            </b:panelGrid>
+                                        </p:fieldset>
+                                        <b:formGroup>
+                                            <b:panel>
+                                                <b:panelGrid colSpans="10,2" size="md" styleClass="ui-fluid" style="font-size: 14px;margin-bottom: 15px">
+                                                    <p:column styleClass="xlarge"  style="box-sizing:border-box">
+                                                        <h:outputText value="Is the applicant a resident of the republic?"/>
+                                                    </p:column> 
+                                                    <p:column styleClass="md">
+                                                        <p:selectOneRadio value="#{applicationBean.entity.saResident}" converter="entityConverter" required="true" requiredMessage="Please answer Is the applicant a resident of the republic?">
+                                                            <f:selectItems value="#{applicationBean.saResidents}" />
+                                                        </p:selectOneRadio>
+                                                    </p:column>
+                                                </b:panelGrid>
+                                            </b:panel>
+                                        </b:formGroup>
+                                    </b:panel>
+
+                                    <b:panel look="primary" title="Choose Application Type" collapsible="false">
+                                        <b:formGroup>
+                                            <p:selectOneRadio value="#{applicationBean.entity.representativeType}" layout="pageDirection" converter="entityConverter" required="true" requiredMessage="Please choose application type">
+                                                <f:selectItems value="#{applicationBean.representativeTypes}" />
+                                                <p:ajax event="change" update="relevantOptionContainer" />
+                                            </p:selectOneRadio>
+                                        </b:formGroup>
+
+
+                                        <h:panelGroup id="relevantOptionContainer" layout="block">
+                                            <p:fieldset legend="Company" rendered="#{applicationBean.entity.representativeType.toString() eq 'Company'}" >
+                                                <ui:repeat var="response" value="#{applicationBean.applicationQuestions}" varStatus="companyVarStatus">
+                                                    <b:panelGrid colSpans="10,2" size="md" styleClass="ui-fluid" rendered="#{response.question.questionType eq 'COMPANY_QUESTIONS'}" style="font-size: 14px;margin-bottom: 15px">
+                                                        <p:column styleClass="xlarge"  style="box-sizing:border-box">
+                                                            <h:outputText value="#{response.question.description}" />
+                                                        </p:column> 
+                                                        <p:column styleClass="md">
+                                                            <p:selectOneRadio value="#{response.responseOption}"  converter="entityConverter" required="true" requiredMessage="Please answer company questions">
+                                                                <f:selectItems value="#{applicationBean.responsesList}" />
+                                                                <p:ajax event="change" update="tabView:company"/>
+                                                            </p:selectOneRadio>
+                                                        </p:column>
+                                                    </b:panelGrid>
+                                                </ui:repeat>
+                                                <p:separator/>
+                                                <p:outputPanel id="company" layout="block">
+                                                    <b:formGroup rendered="#{applicationBean.companyQuestionSelectedYes('Is the company registered in South Africa for tax purposes?')}">
+                                                        <b:panelGrid colSpans="4,4,4"  size="lg" styleClass="ui-fluid">
+                                                            <b:formGroup>
+                                                                <p:outputLabel value="Income Tax reference number"/>
+                                                                <p:inputText required="true" requiredMessage="Please enter income tax reference number" value="#{applicationBean.entity.incomeTaxReference}" type="number" placeholder="Enter Income Tax reference number"/>
+                                                            </b:formGroup>
+                                                            <b:formGroup>
+                                                                <p:outputLabel value="VAT reference number"/>
+                                                                <p:inputText required="true" requiredMessage="Please enter VAT reference number" value="#{applicationBean.entity.vatReference}" type="number" placeholder="Enter VAT reference number:"/>
+                                                            </b:formGroup>
+                                                            <b:formGroup>
+                                                                <p:outputLabel value="PAYE reference number"/>
+                                                                <p:inputText required="true" requiredMessage="Please enter PAYE reference number" value="#{applicationBean.entity.payeReference}" type="number" placeholder="Enter PAYE reference number"/>
+                                                            </b:formGroup>
+                                                        </b:panelGrid>
+                                                    </b:formGroup>
+                                                </p:outputPanel>
+                                            </p:fieldset>
+                                            <p:fieldset legend="Individual"  rendered="#{applicationBean.entity.representativeType.toString() eq 'Individual'}" >
+                                                <b:panelGrid colSpans="6,6"  size="lg" styleClass="ui-fluid">
+                                                    <b:formGroup>
+                                                        <p:outputLabel value="Email address"/>
+                                                        <p:inputText value="#{applicationBean.userDetail.emailAddress}" readonly="true" type="email"/>
+                                                    </b:formGroup>
+                                                    <b:formGroup>
+                                                        <p:outputLabel value="Cellphone"/>
+                                                        <p:inputText value="#{applicationBean.userDetail.cellphone}" readonly="true" type="tel"/>
+                                                    </b:formGroup>
+                                                </b:panelGrid>
+                                                <ui:repeat var="response" value="#{applicationBean.applicationQuestions}" varStatus="individualVarStatus">
+                                                    <b:panelGrid colSpans="10,2" size="md" styleClass="ui-fluid" rendered="#{response.question.questionType eq 'INDIVIDUAL'}" style="font-size: 14px;margin-bottom: 15px">
+                                                        <p:column styleClass="xlarge"  style="box-sizing:border-box">
+                                                            <h:outputText value="#{response.question.description}" />
+                                                        </p:column> 
+                                                        <p:column styleClass="md">
+                                                            <p:selectOneRadio value="#{response.responseOption}"  converter="entityConverter" required="true" requiredMessage="Please answer individual questions">
+                                                                <f:selectItems value="#{applicationBean.responsesList}" />
+                                                                <p:ajax event="change" update="tabView:individual"/>
+                                                            </p:selectOneRadio>
+                                                        </p:column>
+                                                    </b:panelGrid>
+                                                </ui:repeat>
+                                                <p:separator/>
+                                                <p:outputPanel id="individual" layout="block">
+                                                    <b:formGroup rendered="#{applicationBean.entity.representativeType.toString() eq 'Individual' and applicationBean.companyQuestionSelectedYes('Is this person registered in south africa for tax purposes?')}">
+                                                        <b:panelGrid colSpans="4,4,4"  size="lg" styleClass="ui-fluid">
+                                                            <b:formGroup>
+                                                                <p:outputLabel value="Identity number"/>
+                                                                <p:inputText readonly="true" value="#{applicationBean.userDetail.idNumber}" type="number" placeholder="Enter ID number"/>
+                                                            </b:formGroup>
+                                                            <b:formGroup>
+                                                                <p:outputLabel value="Income tax reference number"/>
+                                                                <p:inputText readonly="true" value="#{applicationBean.userDetail.incomeTaxNum}" type="number" placeholder="Enter Income Tax reference number"/>
+                                                            </b:formGroup>
+                                                            <b:formGroup>
+                                                                <p:outputLabel value="Passsport number"/>
+                                                                <p:inputText readonly="true" value="#{applicationBean.userDetail.passPortNumber}" type="number" placeholder="Enter Passport number"/>
+                                                            </b:formGroup>
+                                                        </b:panelGrid>
+                                                    </b:formGroup>
+                                                </p:outputPanel>
+                                            </p:fieldset>
+                                            <p:fieldset legend="Description of the class" rendered="#{applicationBean.entity.representativeType.toString() eq 'Class'}">
+                                                <b:formGroup>
+                                                    <p:selectOneRadio value="#{applicationBean.entity.classDescription}" layout="pageDirection" converter="entityConverter" required="true" requiredMessage="Please choose class type">
+                                                        <f:selectItems value="#{applicationBean.descriptions}" />
+                                                        <p:ajax event="change" update="classDescription"/>
+                                                    </p:selectOneRadio>
+                                                </b:formGroup>
+                                                <h:panelGroup id="classDescription" layout="block">
+                                                    <b:panelGrid colSpans="6,6"  size="lg" styleClass="ui-fluid">
+                                                        <b:formGroup rendered="#{applicationBean.entity.classDescription.toString() eq 'Other'}">
+                                                            <p:outputLabel value="Other class description"/>
+                                                            <p:inputText 
+                                                                value="#{applicationBean.entity.otherDescription}"
+                                                                rendered="#{applicationBean.entity.classDescription.toString() eq 'Other'}"
+                                                                placeholder="Enter class descrition" required="true" requiredMessage="Please enter other class description"/>
+                                                        </b:formGroup>
+                                                    </b:panelGrid>
+                                                </h:panelGroup>
+                                            </p:fieldset>
+                                            <p:fieldset legend="Trust"  rendered="#{applicationBean.entity.representativeType.toString() eq 'Trust'}">
+                                                <b:panelGrid colSpans="6,6"  size="lg" styleClass="ui-fluid">
+                                                    <b:formGroup>
+                                                        <p:outputLabel value="Trust number:"/>
+                                                        <p:inputText required="true" requiredMessage="Please enter trust number" value="#{applicationBean.entity.trustNumber}" type="number"/>
+                                                    </b:formGroup>
+                                                    <b:formGroup>
+                                                        <p:outputLabel value="Date of registation"/>
+                                                        <p:datePicker required="true" requiredMessage="Please select date of registration" value="#{applicationBean.entity.firstRegDate}"/>
+                                                    </b:formGroup>
+                                                </b:panelGrid>
+                                                <ui:repeat var="response" value="#{applicationBean.applicationQuestions}" varStatus="trustVarStatus">
+                                                    <b:panelGrid colSpans="10,2" size="md" styleClass="ui-fluid" rendered="#{response.question.questionType eq 'TRUST_QUESTIONS'}" style="font-size: 14px;margin-bottom: 15px">
+                                                        <p:column styleClass="xlarge"  style="box-sizing:border-box" >
+                                                            <h:outputText value="#{response.question.description}" />
+                                                        </p:column> 
+                                                        <p:column styleClass="md" >
+                                                            <p:selectOneRadio value="#{response.responseOption}"  converter="entityConverter" required="true" requiredMessage="Please answer trust questions">
+                                                                <f:selectItems value="#{applicationBean.responsesList}" />
+                                                                <p:ajax event="change" update="tabView:trust"/>
+                                                            </p:selectOneRadio>
+                                                        </p:column>
+                                                    </b:panelGrid>
+                                                </ui:repeat>
+                                                <p:outputPanel id="trust" layout="block">
+                                                    <b:panelGrid colSpans="6,6"  size="lg" styleClass="ui-fluid">
+                                                        <b:formGroup rendered="#{applicationBean.entity.representativeType.toString() eq 'Trust' and applicationBean.companyQuestionSelectedYes('Is the trust registered in South Africa for tax purposes?')}">
+                                                            <p:outputLabel value="Income Tax reference number"/>
+                                                            <p:inputText required="true" requiredMessage="Please enter income tax reference number" value="#{applicationBean.entity.incomeTaxReference}" type="number" placeholder="Enter Income Tax reference number"/>
+                                                        </b:formGroup>
+                                                    </b:panelGrid>
+                                                </p:outputPanel>
+                                            </p:fieldset>
+                                            <p:fieldset legend="Foreign Entity" rendered="#{applicationBean.entity.representativeType.toString() eq 'Foreign Entity'}" >
+                                                <b:formGroup>
+                                                    <p:selectOneRadio value="#{applicationBean.entity.entityType}" layout="pageDirection" converter="entityConverter" required="true" requiredMessage="Please choose foreign entity type">
+                                                        <f:selectItems value="#{applicationBean.entityTypes}" />
+                                                        <p:ajax event="change" update="foreignEntity"/>
+                                                    </p:selectOneRadio>
+                                                </b:formGroup>
+                                                <b:formGroup id="foreignEntity">
+                                                    <ui:repeat id="foreignEntityRepeat" var="response" value="#{applicationBean.applicationQuestions}" varStatus="foreignEntityVarStatus" rendered="#{applicationBean.entity.entityType.toString() eq 'Company'}">
+                                                        <b:panelGrid colSpans="10,2" size="md" styleClass="ui-fluid" rendered="#{response.question.questionType eq 'COMPANY_QUESTIONS'}" style="font-size: 14px;margin-bottom: 15px">
+                                                            <p:column styleClass="xlarge"  style="box-sizing:border-box">
+                                                                <h:outputText value="#{response.question.description}" />
+                                                            </p:column> 
+                                                            <p:column styleClass="md">
+                                                                <p:selectOneRadio value="#{response.responseOption}"  converter="entityConverter" required="true" requiredMessage="Please answer foreign entity questions">
+                                                                    <f:selectItems value="#{applicationBean.responsesList}" />
+                                                                    <p:ajax event="change" update="tabView:foreignEntityCompany"/>
+                                                                </p:selectOneRadio>
+                                                            </p:column>
+                                                        </b:panelGrid>
+
+                                                    </ui:repeat>
+                                                    <p:separator/>
+                                                    <p:outputPanel id="foreignEntityCompany" layout="block">
+                                                        <b:formGroup rendered="#{applicationBean.entity.entityType.toString() eq 'Company' and applicationBean.companyQuestionSelectedYes('Is the company registered in South Africa for tax purposes?')}">
+                                                            <b:panelGrid colSpans="4,4,4"  size="lg" styleClass="ui-fluid">
+                                                                <b:formGroup>
+                                                                    <p:outputLabel value="Income Tax reference number"/>
+                                                                    <p:inputText required="true" requiredMessage="Please enter income tax reference number" value="#{applicationBean.entity.incomeTaxReference}" type="number" placeholder="Enter Income Tax reference number"/>
+                                                                </b:formGroup>
+                                                                <b:formGroup>
+                                                                    <p:outputLabel value="VAT reference number"/>
+                                                                    <p:inputText required="true" requiredMessage="Please enter VAT reference number" value="#{applicationBean.entity.vatReference}" type="number" placeholder="Enter VAT reference number:"/>
+                                                                </b:formGroup>
+                                                                <b:formGroup>
+                                                                    <p:outputLabel value="PAYE reference number"/>
+                                                                    <p:inputText required="true" requiredMessage="Please enter PAYE reference number" value="#{applicationBean.entity.payeReference}" type="number" placeholder="Enter PAYE reference number"/>
+                                                                </b:formGroup>
+                                                            </b:panelGrid>
+                                                        </b:formGroup>
+                                                        <h:panelGroup id="otherDescription" layout="block" rendered="#{applicationBean.entity.entityType.toString() eq 'Other'}">
+                                                            <b:panelGrid colSpans="6,6"  size="lg" styleClass="ui-fluid">
+                                                                <b:formGroup>
+                                                                    <p:outputLabel value="Other foreign entity description"/>
+                                                                    <p:inputText 
+                                                                        value="#{applicationBean.entity.otherDescription}"
+                                                                        placeholder="Enter foreign entity description" required="true" requiredMessage="Please enter other foerign entity description"/>
+                                                                </b:formGroup>
+                                                            </b:panelGrid>
+                                                        </h:panelGroup>
+                                                    </p:outputPanel>
+
+                                                </b:formGroup>
+                                            </p:fieldset>
+                                            <p:fieldset legend="Public Benefit Organisation"  rendered="#{applicationBean.entity.representativeType.toString() eq 'Public Benefit Organisation'}"> 
+                                                <ui:repeat var="response" value="#{applicationBean.applicationQuestions}" varStatus="publicBenefitVarStatus">
+                                                    <b:panelGrid colSpans="10,2" size="md" styleClass="ui-fluid" rendered="#{response.question.questionType eq 'BPO'}" style="font-size: 14px;margin-bottom: 15px">
+                                                        <p:column styleClass="xlarge"  style="box-sizing:border-box">
+                                                            <h:outputText value="#{response.question.description}" />
+                                                        </p:column> 
+                                                        <p:column styleClass="md">
+                                                            <p:selectOneRadio value="#{response.responseOption}"  converter="entityConverter" required="true" requiredMessage="Please answer public benefit organisation">
+                                                                <f:selectItems value="#{applicationBean.responsesList}" />
+                                                                <p:ajax event="change" update="tabView:bpo"/>
+                                                            </p:selectOneRadio>
+                                                        </p:column>
+                                                    </b:panelGrid>
+                                                </ui:repeat>
+                                                <p:outputPanel id="bpo" layout="block">
+                                                    <b:formGroup rendered="#{applicationBean.entity.representativeType.toString() eq 'Public Benefit Organisation' and applicationBean.companyQuestionSelectedYes('Is the PBO registered in South Africa for tax purposes?')}">
+                                                        <b:panelGrid colSpans="6,6"  size="lg" styleClass="ui-fluid">
+                                                            <b:formGroup>
+                                                                <p:outputLabel value="Income Tax reference number"/>
+                                                                <p:inputText required="true" requiredMessage="Please enter income tax reference number" value="#{applicationBean.entity.incomeTaxReference}" type="number" placeholder="Enter Income Tax reference number"/>
+                                                            </b:formGroup>
+                                                            <b:formGroup>
+                                                                <p:outputLabel value="PAYE reference number"/>
+                                                                <p:inputText required="true" requiredMessage="Please enter PAYE reference number" value="#{applicationBean.entity.payeReference}" type="number" placeholder="Enter PAYE reference number"/>
+                                                            </b:formGroup>
+                                                        </b:panelGrid>
+                                                    </b:formGroup>
+                                                </p:outputPanel>
+                                            </p:fieldset>
+                                        </h:panelGroup>
+
+                                    </b:panel>
+                                </b:panelGrid>
+                                <f:facet name="footer">
+                                    <p:toolbar>   
+                                        <p:toolbarGroup>       
+                                            <b:commandButton action="#{applicationBean.back(0)}" update="@form" look="primary" immediate="true" large-screen="full-width" size="lg"  process="@this" value="Back" icon="arrow-left"/> 
+                                        </p:toolbarGroup>  
+                                        <p:toolbarGroup align="right">  
+                                            <b:commandButton large-screen="full-width" size="lg" value="Next" look="primary" icon="arrow-right" action="#{applicationBean.next(2)}" iconAlign="right"   update="@form" process="appForm"/>  
+                                        </p:toolbarGroup>
+
+                                    </p:toolbar>
+
+                                    <b:row>
+                                        <b:panelGrid colSpans="6,6" size="lg" styleClass="ui-fluid">
+                                            <b:commandButton large-screen="full-width" size="lg" value="Save Application" action="#{applicationBean.save(applicationBean.entity)}"     icon="check" look="success"   immediate="true" update="@form" />
+                                            <b:commandButton large-screen="full-width" size="lg"  value="Cancel" icon="remove" action="#{applicationBean.cancel(applicationBean.entity)}" immediate="true" process="@this" look="danger" update="@form tabView" />
+                                        </b:panelGrid>
+                                    </b:row>
+                                </f:facet>
+                            </b:panel>
+                        </p:tab>
+                        <p:tab id="summaryTab" title="Summary" disabled="#{applicationBean.tabIndex != 2}">
+
+                            <b:panel id="summaryPanel" look="default" collapsible="false" style="font-size: 14px !important;">
+
+
+                                <b:panel title="Application details" look="primary" collapsible="false">
+                                    <p:panelGrid columns="4" styleClass="ui-panelgrid-blank" style="width:100%;">
+                                        <h:outputLabel value="Tax Ref Number:" styleClass="no-bg"/>
+                                        <h:outputText value="#{applicationBean.entity.incomeTaxReference}" styleClass="no-bg"/>
+                                        <h:outputLabel value="ATR Reference Number:" styleClass="no-bg"/>
+                                        <h:outputText value="#{applicationBean.entity.caseNum}" styleClass="no-bg"/>
+
+                                        <h:outputLabel value="Application Status:" styleClass="no-bg"/>
+                                        <h:outputText value="#{applicationBean.entity.status.toString()}" styleClass="no-bg"/>
+                                        <h:outputLabel value="Status comment:" styleClass="no-bg"/>
+                                        <h:outputText value="#{applicationBean.entity.status.toString()}" styleClass="no-bg"/>
+
+                                        <!--                                        <h:outputLabel value="*Estimated fee range:" styleClass="no-bg"/>
+                                                                                <h:outputText value="*R10 000 to R35 000" styleClass="no-bg"/>
+                                                                                <h:outputLabel value="*Estimated due date" styleClass="no-bg"/>
+                                                                                <h:outputText value="*25 August 2025" styleClass="no-bg"/>
+                                                                                
+                                                                                <h:outputLabel value="*Original stimated due date" styleClass="no-bg"/>
+                                                                                <h:outputText value="*01 August 2025" styleClass="no-bg"/>
+                                                                                <h:outputLabel value="*Estimated time" styleClass="no-bg"/>
+                                                                                <h:outputText value="*29 days" styleClass="no-bg"/>
+                                                                                
+                                                                                <h:outputLabel value="*Allocated Manager" styleClass="no-bg"/>
+                                                                                <h:outputText value="*Nicholas Rabalao" styleClass="no-bg"/>
+                                                                                <h:outputLabel value="*ATR Resource" styleClass="no-bg"/>
+                                                                                <h:outputText value="*Leina Sefane" styleClass="no-bg"/>-->
+
+
+                                    </p:panelGrid>
+                                </b:panel>
+
+
+
+                                <b:panel title="Applicant Details" look="primary" collapsible="false">
+                                    <p:panelGrid columns="4" styleClass="ui-panelgrid-blank" style="width:100%;">
+                                        <h:outputLabel value="Applicant Name:" styleClass="no-bg"/>
+                                        <h:outputText value="#{applicationBean.entity.applicantName}" styleClass="no-bg"/>
+                                        <h:outputLabel value="Applicant Type:" styleClass="no-bg"/>
+                                        <h:outputText value="#{applicationBean.entity.representativeType.toString()}" styleClass="no-bg"/>
+
+                                        <h:outputLabel value="Resident of the Republic:" styleClass="no-bg"/>
+                                        <h:outputText value="#{applicationBean.entity.saResident.toString()}" styleClass="no-bg"/>
+                                        <h:outputLabel value="Is SMME or Natural Person:" styleClass="no-bg"/>
+                                        <h:outputText value="#{applicationBean.naturalPerson}" styleClass="no-bg"/>
+                                    </p:panelGrid>
+                                </b:panel>
+
+
+
+                                <b:panel title="Representative / Third Party Contact Details" look="primary" collapsible="false">
+                                    <p:panelGrid columns="4" styleClass="ui-panelgrid-blank" style="width:100%;">
+                                        <h:outputLabel value="Name:" styleClass="no-bg"/>
+                                        <h:outputText value="#{applicationBean.userDetail.fullName}" styleClass="no-bg"/>
+                                        <h:outputLabel value="Cellphone:" styleClass="no-bg"/>
+                                        <h:outputText value="#{applicationBean.userDetail.cellphone}" styleClass="no-bg"/>
+
+                                        <h:outputLabel value="Capacity:" styleClass="no-bg"/>
+                                        <h:outputText value="#{applicationBean.entity.representativeType.toString()}" styleClass="no-bg"/>
+                                        <h:outputLabel value="Landline:" styleClass="no-bg"/>
+                                        <h:outputText value="#{applicationBean.userDetail.telephone}" styleClass="no-bg"/>
+
+                                        <h:outputLabel value="Email Address:" styleClass="no-bg"/>
+                                        <h:outputText value="#{applicationBean.userDetail.emailAddress}" styleClass="no-bg"/>
+                                        <h:outputText value="" styleClass="no-bg"/>
+                                    </p:panelGrid>
+                                </b:panel>
+
+
+
+                                <b:panel title="eFiler Contact Details" look="primary" collapsible="false">
+                                    <p:panelGrid columns="4" styleClass="ui-panelgrid-blank" style="width:100%;">
+                                        <h:outputLabel value="Name:" styleClass="no-bg"/>
+                                        <h:outputText value="#{applicationBean.userDetail.fullName}" styleClass="no-bg"/>
+                                        <h:outputLabel value="ID/Passport Number:" styleClass="no-bg"/>
+                                        <h:outputText rendered="#{applicationBean.userDetail.passPortNumber eq null}" value="#{applicationBean.userDetail.idNumber}" styleClass="no-bg"/>
+                                        <h:outputText rendered="#{applicationBean.userDetail.passPortNumber ne null}" value="#{applicationBean.userDetail.passPortNumber}" styleClass="no-bg"/>
+
+                                        <h:outputLabel value="Cellphone:" styleClass="no-bg"/>
+                                        <h:outputText value="#{applicationBean.userDetail.cellphone}" styleClass="no-bg"/>
+                                        <h:outputText value="" styleClass="no-bg"/>
+                                    </p:panelGrid>
+                                </b:panel>
+                                <b:panel title="Note" look="info" collapsible="false" rendered="#{applicationBean.entity.status.toString() eq 'Saved'}">
+                                    <p:panelGrid columns="1"  styleClass="ui-panelgrid-blank" style="width:100%;">
+                                        <h:outputLabel value="Your application has not yet been submitted." styleClass="no-bg"/>
+                                        <h:outputLabel value="Please click SUBMIT to submit your application or DELETE from your application list to remove your application" styleClass="no-bg"/>
+                                    </p:panelGrid>
+                                </b:panel>
+                                <b:panel title="Next Steps" look="info" collapsible="false" rendered="#{applicationBean.entity.status.toString() eq 'SUBMITTED_PAYMENT_UNCONFIRMED'}">
+                                    <p:panelGrid columns="1"  styleClass="ui-panelgrid-blank" style="width:100%;">
+                                    <ul>
+                                        <li><span style="font-weight: bold;">Select Upload Document on the menu to add the application documents.</span></li>
+                                        <li><span style="font-weight: bold;">Payment can only be made via EFT and not on eFiling.</span></li>
+                                        <li><span style="font-weight: bold;">The ATR unit will provide the contact person for this application with the details for EFT payments.</span></li>
+                                    </ul>
+                                        <h:outputLabel value="NOTE: ATR fees should not be electronically transferred into a general SARS account." styleClass="no-bg"/>
+                                    </p:panelGrid>
+                                </b:panel>
+
+                                <f:facet name="footer">
+                                    <p:toolbar>   
+                                        <p:toolbarGroup>       
+                                            <b:commandButton action="#{applicationBean.back(1)}" update="@form" look="primary" immediate="true" large-screen="full-width" size="lg"  process="@this" value="Back" icon="arrow-left"/> 
+                                        </p:toolbarGroup>  
+                                    </p:toolbar>
+                                    <b:row>
+                                        <b:panelGrid colSpans="4,4,4" size="lg" styleClass="ui-fluid">
+                                            <b:commandButton large-screen="full-width" size="lg" value="Save Application" action="#{applicationBean.save(applicationBean.entity)}"     icon="check" look="success"   immediate="true" update="@form" />
+                                            <b:commandButton large-screen="full-width" size="lg" value="Submit Application" action="#{applicationBean.submit(applicationBean.entity)}"     icon="check" look="primary"   update="@form" />
+                                            <b:commandButton large-screen="full-width" size="lg"  value="Cancel" action="#{applicationBean.cancel(applicationBean.entity)}" icon="remove" immediate="true" process="@this" look="danger" update="@form tabView" />
+                                        </b:panelGrid>
+                                    </b:row>
+                                </f:facet>
+                            </b:panel>
+                        </p:tab>
+                    </p:tabView>
+                </b:panel>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

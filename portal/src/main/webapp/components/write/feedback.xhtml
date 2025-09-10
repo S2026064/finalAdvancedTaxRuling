@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/XHtml.xhtml to edit this template
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html">
+    <ui:component>
+
+        <b:panel look="default" collapsible="false">
+            <b:panelGrid colSpans="12" styleClass="ui-fluid">
+                <b:panel look="primary" title="Feedback Log" collapsible="false" rendered="#{sharedBean.feedBacks.size() gt 0}">
+                    <h:panelGroup id="feedbackPanelGroup" layout="block" style="max-height: 400px; overflow-y: auto;">
+                        <ui:repeat value="#{sharedBean.feedBacks}" var="feedback">
+                            <h:panelGroup layout="block"
+                                          style="display: flex; gap: 1rem; margin-bottom: 1.5rem"
+                                          styleClass="#{feedback.createdBy eq 'Applicant' ? 'justify-end' : ''}">
+
+                                <h:panelGroup layout="block" style="max-width: 650px;">
+                                    <p style="font-size: 13px; color: #637988;"
+                                       styleClass="#{feedback.createdBy eq 'Applicant' ? 'text-right' : ''}">
+                                        #{feedback.createdBy} - 
+                                        <span>
+                                            <h:outputText value="#{feedback.createdDate}">
+                                                <f:convertDateTime pattern="yyyy-MM-dd HH:mm" />
+                                            </h:outputText>
+                                        </span>
+
+                                    </p>
+                                    <p style="padding: 0.75rem 1rem; border-radius: 0.5rem;
+                                       background-color: #{feedback.createdBy eq 'Applicant' ? '#1993e5' : '#f0f3f4'};
+                                       color: #{feedback.createdBy eq 'Applicant' ? 'white' : '#111518'};">
+                                        #{feedback.description}
+                                    </p>
+                                </h:panelGroup>
+
+                            </h:panelGroup>
+                        </ui:repeat>
+                        <h:outputText id="scrollEnd" style="display:none" />
+                    </h:panelGroup>
+                </b:panel>
+
+                <b:fetchBeanInfos />
+                <b:panel look="primary" title="Upload feedback document" collapsible="false">
+                    <p:fileUpload onstart="PF('blockUI').block()" listener="#{sharedBean.handleFileUpload}"   oncomplete="PF('blockUI').unblock()"   auto="true"  mode="advanced" dragDropSupport="false" process="attach"  update="@form: attach" sizeLimit="8000000" fileLimit="3" allowTypes="/(\.|\/)(gif|jpe?g|png|pdf|doc|docx|xls|xlsx|xlsm|mp4|avi|flv|mkv|wmv|mov)$/i"/>
+                </b:panel>
+                <p:outputPanel id="attach">
+                    <p:separator rendered="true"/>  
+                    <b:panel look="primary" title="List of documents" collapsible="false" rendered="#{not sharedBean.supportingDocuments.isEmpty()}">
+                        <b:panelGrid colSpans="2,3,3,2,2" size="lg" styleClass="ui-fluid">
+                            <p:outputLabel value="Date"/>
+                            <p:outputLabel value="Description"/>
+                            <p:outputLabel value="Document Type"/>
+                            <p:outputLabel value="Size"/>
+                            <p:outputLabel value="Action"/>
+                        </b:panelGrid>                    
+                        <p:separator/>
+                        <ui:repeat value="#{sharedBean.entity.supportingDocuments}" var="document" varStatus="documentVarStatus">
+                            <b:panelGrid colSpans="2,3,3,2,2" size="lg" styleClass="ui-fluid" rendered="#{document.documentType eq 'FEEDBACK'}">
+                                <b:formGroup>
+                                    <h:outputText value="#{document.createdDate}" styleClass="customCSS">
+                                        <f:convertDateTime   pattern="dd MMMM yyyy"/>
+                                    </h:outputText>
+                                </b:formGroup>
+                                <b:formGroup>
+                                    <h:outputText value="#{document.description}" styleClass="customCSS"/>
+                                </b:formGroup>
+                                <b:formGroup>
+                                    <h:outputText value="#{document.documentType.toString()}" styleClass="customCSS"/> 
+                                </b:formGroup>
+                                <b:formGroup>
+                                    <h:outputText value="#{document.documentSize}" styleClass="customCSS"/>
+                                </b:formGroup>
+                                <b:formGroup>
+                                    <b:panelGrid colSpans="6,6" size="lg" styleClass="ui-fluid">
+                                        <p:commandButton    styleClass="btn-size-sm"  value="Download" actionListener="#{sharedBean.fileDownload(document)}"  ajax="false" immediate="true"  update="@form">
+                                            <p:fileDownload  value="#{sharedBean.downloadFile}"/>
+                                        </p:commandButton>
+                                        <p:commandButton styleClass="ui-button-danger btn-size-sm"  value="Delete"  immediate="true" update="@form"/>
+                                    </b:panelGrid>
+                                </b:formGroup>
+                            </b:panelGrid>
+                            <p:separator rendered="#{document.documentType eq 'FEEDBACK'}"/> 
+                        </ui:repeat>
+                    </b:panel>
+
+                </p:outputPanel>
+
+            </b:panelGrid>
+
+            <b:panelGrid colSpans="12" size="lg" styleClass="ui-fluid">
+                <b:formGroup>
+                    <p:outputLabel value="Feedback Description"/>
+                    <b:inputTextarea rows="2" value="#{sharedBean.comment}" required="true" requiredMessage="Please enter your feedback"/>
+                </b:formGroup>
+            </b:panelGrid>
+
+
+            <f:facet name="footer">
+                <b:row>
+                    <b:panelGrid colSpans="6,6" size="lg" styleClass="ui-fluid">
+                        <b:commandButton large-screen="full-width" size="lg" value="Submit" action="#{sharedBean.feedback(sharedBean.entity)}" icon="check" look="success" update="@form"/>
+                        <b:commandButton large-screen="full-width" size="lg"  value="Cancel" icon="remove"  look="danger" action="#{sharedBean.cancelFeedback(sharedBean.entity)}" immediate="true" update="@form" />
+                    </b:panelGrid>
+                </b:row>
+            </f:facet>
+        </b:panel>
+    </ui:component>
+    <script>
+        window.onload = function () {
+            var scrollEnd = document.getElementById("feedbackPanelGroup:scrollEnd");
+            if (scrollEnd) {
+                scrollEnd.scrollIntoView({behavior: "smooth"});
+            }
+        };
+
+    </script>
+</html>

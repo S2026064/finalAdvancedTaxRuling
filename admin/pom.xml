@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>za.gov.sars.atr</groupId>
-        <artifactId>sars.atr.system</artifactId>
+        <artifactId>finalAdvancedTaxRuling</artifactId>
         <version>1.0.0</version>
     </parent>
     <groupId>za.gov.sars.admin</groupId>

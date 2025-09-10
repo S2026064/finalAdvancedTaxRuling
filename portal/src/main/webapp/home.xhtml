@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:p="http://primefaces.org/ui">
+    <h:body>
+        <ui:composition template="/template/template.xhtml">
+            <ui:define name="maincontent">
+                <p:panel style="font-family: 'Segoe UI', sans-serif; font-size: 14px; color: #111518;">
+
+                    <div style="padding: 5px 36px !important;">
+
+                        <!-- Contact Details -->
+                        <p style="text-align: center; margin-top: 0; margin-bottom: 20px;">
+                            <strong>Contact details:</strong><br/>
+                            Email: <a href="mailto:ATRinfo@sars.gov.za" style="color: #3399ff; text-decoration: none;">ATRinfo@sars.gov.za</a>
+                        </p>
+
+                        <!-- What is an Advance Tax Ruling -->
+                        <h4 style="color: #003366; font-weight: bold;">What is an Advance Tax Ruling?</h4>
+                        <p>
+                            An Advance Tax Ruling is a written statement issued by SARS that provides clarity and certainty on the Commissioner’s interpretation and application of the tax laws regarding a proposed transaction. A taxpayer (applicant) can apply for a Binding Private or a Binding Class Ruling.
+                        </p>
+
+                        <!-- Binding Private Ruling -->
+                        <h4 style="color: #003366; font-weight: bold;">What is a Binding Private Ruling?</h4>
+                        <p>
+                            A Binding Private Ruling is a written statement issued by SARS regarding the application of a tax act to one or more parties to a proposed transaction.
+                        </p>
+
+                        <!-- Binding Class Ruling -->
+                        <h4 style="color: #003366; font-weight: bold;">What is a Binding Class Ruling?</h4>
+                        <p>
+                            A Binding Class Ruling is a written statement issued by SARS regarding the application of a tax act to a specific class of persons in respect of a proposed transaction.
+                        </p>
+                        <p>
+                            A class would be shareholders, members, beneficiaries (or similar) in respect of a company, association, pension fund or trust; or a group of persons that may be unrelated but are similarly affected by the proposed transaction and agree to be represented by the applicant.
+                        </p>
+
+                        <!-- Fees Section -->
+                        <h4 style="color: #003366; font-weight: bold;">Are there any fees payable?</h4>
+                        <p>
+                            Yes, in terms of section 81(1) of the Tax Administration Act the Commissioner may prescribe an application and a cost recovery fee to defray the cost of the ‘advance ruling’ system. There are three payments required during the ruling application process:
+                        </p>
+                        <ol style="padding-left: 20px;">
+                            <li>Application fee – a non-refundable fee that does not form part of the total cost of the application.</li>
+                            <li>Deposit (advance payment) on the cost recovery fee – calculated at 20% of the higher range of the estimated fee range.</li>
+                            <li>Final payment of the outstanding balance in respect of the cost recovery fee – to settle the invoice for the work performed/time spent in processing the ruling request.</li>
+                        </ol>
+
+                        <!-- More Info Section -->
+                        <h4 style="color: #003366; font-weight: bold;">How do I obtain more information?</h4>
+                        <ul style="padding-left: 20px;">
+                            <li>
+                                Visit the 
+                                <a href="https://www.sars.gov.za" style="color: #3399ff; text-decoration: none;">Advance Tax Ruling</a> 
+                                page on the SARS website.
+                            </li>
+                            <li>
+                                Refer to the 
+                                <a href="https://www.sars.gov.za" style="color: #3399ff; text-decoration: none;">Comprehensive Guide to Advance Tax Rulings</a> 
+                                on the SARS website.
+                            </li>
+                            <li>
+                                Email 
+                                <a href="mailto:ATRinfo@sars.gov.za" style="color: #3399ff; text-decoration: none;">ATRinfo@sars.gov.za</a> 
+                                for further assistance.
+                            </li>
+                        </ul>
+
+                        <!-- Note Section -->
+                        <h4 style="color: #003366; font-weight: bold;">Note:</h4>
+                        <ul style="padding-left: 20px;">
+                            <li>The ATR unit issues rulings on the interpretation of legislation in respect of proposed transactions and does not provide guidance for general eFiling or general individual tax-related queries. Please contact the SARS Call Centre on 
+                                <a href="tel:0800007277" style="color: #3399ff; text-decoration: none;">0800 007 277</a> or refer to the 
+                                <a href="https://www.sars.gov.za" style="color: #3399ff; text-decoration: none;">Contact Us</a> page for additional contact alternatives.
+                            </li>
+                            <li>
+                                Refer to 
+                                <a href="https://www.sars.gov.za" style="color: #3399ff; text-decoration: none;">Public Notice 5533 of 8 November 2024</a> 
+                                for a list of aspects on which rulings cannot be issued.
+                            </li>
+                        </ul>
+                    </div>
+                     <f:event type="preRenderView" listener="#{counterBean.incrementCounter}"/>
+                </p:panel>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:atr="http://xmlns.jcp.org/jsf/composite/components">
+    <h:body>
+        <ui:composition template="/template/template.xhtml">
+            <ui:define name="maincontent">
+                <b:panel rendered="#{queryBean.list}" look="default" collapsible="false">
+                    <f:facet name="heading">
+                        <b:panelGrid colSpans="12" size="lg" styleClass="ui-fluid">
+                            <p:outputLabel value="Applications" styleClass="panel-title-css"/>
+                        </b:panelGrid>
+                    </f:facet>
+                    <p:dataTable rowIndexVar="rowIndex"  globalFilterOnly="true"  widgetVar="confirmationTable" value="#{queryBean.atrApplications}" var="app" paginator="true"  paginatorAlwaysVisible="false" reflow="true" rows="15">
+                        <f:facet name="header">                          
+                            <p:toolbar>
+                                <p:toolbarGroup align="right">
+                                    <p:inputText placeholder="Filter by all fields" id="globalFilter" style="width:30rem" onkeyup="PF('applicationTable').filter()"/>
+                                </p:toolbarGroup>
+                            </p:toolbar>
+                        </f:facet>
+                        <p:column headerText="ATR ref. no.">
+                            <h:outputText value="#{app.caseNum}"/>
+                        </p:column>
+                        <p:column headerText="Applicant name">
+                            <h:outputText value="#{app.applicantName}"/>
+                        </p:column>
+                        <p:column headerText="Status">
+                            <h:outputText value="#{app.status.toString()}"/>
+                        </p:column>
+                        <p:column headerText="Date">
+                            <h:outputText value="#{app.createdDate}">
+                                <f:convertDateTime  pattern="dd MMMM yyyy"/>
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="Ruling Type">
+                            <h:outputText value="#{app.rulingType.toString()}"/>
+                        </p:column>
+                        <p:column headerText="Action" styleClass="large">
+                            <p:badge value="#{queryBean.getUnreadCount(app)}"
+                                     severity="danger"
+                                     size="large"
+                                     style="top: 6px !important;"
+                                     rendered="#{queryBean.getUnreadCount(app) > 0}">
+                                <p:commandButton value="Query"
+                                                 icon="pi pi-comments"
+                                                 styleClass="btn-size-sm"
+                                                 action="#{queryBean.createQuery(app)}"
+                                                 update="@form" />
+                            </p:badge>
+
+                            <p:commandButton value="Query"
+                                             icon="pi pi-comments"
+                                             styleClass="btn-size-sm"
+                                             action="#{queryBean.createQuery(app)}"
+                                             update="@form"
+                                             rendered="#{queryBean.getUnreadCount(app) == 0}" />
+                        </p:column>    
+                    </p:dataTable>
+                </b:panel>
+                <b:panel rendered="#{queryBean.add}" look="default" collapsible="false" title="ATR Application Queries">
+                    <!--<div class="layout-container" style="min-height: 100vh; display: flex; flex-direction: column; padding: 0 4.5rem;">-->
+
+                    <atr:shortSummary entity="#{queryBean.selectedAtrApplication}" title="Summary"/>
+
+                    <b:panel look="primary" title="Query Log" collapsible="false" rendered="#{queryBean.queries.size() gt 0}">
+                        <h:panelGroup layout="block" style="max-height: 400px; overflow-y: auto;">
+                            <ui:repeat value="#{queryBean.queries}" var="query">
+                                <h:panelGroup layout="block"
+                                              style="display: flex; gap: 1rem; margin-bottom: 1.5rem"
+                                              styleClass="#{query.createdBy eq 'Applicant' ? 'justify-end' : ''}">
+
+                                    <h:panelGroup layout="block" style="max-width: 650px;">
+                                        <p style="font-size: 13px; color: #637988;"
+                                           styleClass="#{query.createdBy eq 'Applicant' ? 'text-right' : ''}">
+                                            #{query.createdBy} - 
+                                            <span>
+                                                <h:outputText value="#{query.createdDate}">
+                                                    <f:convertDateTime pattern="yyyy-MM-dd HH:mm" />
+                                                </h:outputText>
+                                            </span>
+                                        </p>
+                                        <p style="padding: 0.75rem 1rem; border-radius: 0.5rem;
+                                           background-color: #{query.createdBy eq 'Applicant' ? '#1993e5' : '#f0f3f4'};
+                                           color: #{query.createdBy eq 'Applicant' ? 'white' : '#111518'};">
+                                            #{query.description}
+                                        </p>
+                                    </h:panelGroup>
+
+                                </h:panelGroup>
+                            </ui:repeat>
+                        </h:panelGroup>
+                    </b:panel>
+
+                    <b:panelGrid colSpans="12" size="lg" styleClass="ui-fluid">
+                        <b:formGroup>
+                            <p:outputLabel value="Query Description"/>
+                            <b:inputTextarea rows="2" value="#{queryBean.entity.description}" required="true" requiredMessage="Please enter your query"/>
+                        </b:formGroup>
+                    </b:panelGrid>
+
+                    <!--</div>-->
+                    <f:facet name="footer">
+                        <b:row>
+                            <b:panelGrid colSpans="6,6" size="lg" styleClass="ui-fluid">
+                                <b:commandButton large-screen="full-width" size="lg" value="Send Query" icon="envelope" look="success" action="#{queryBean.submitQuery(queryBean.entity)}" update="@form"/>
+                                <b:commandButton large-screen="full-width" size="lg" value="Cancel" iconAwesome="window-close" look="danger" action="#{queryBean.cancel(queryBean.entity)}" immediate="true" process="@this" update="@form"/>
+                            </b:panelGrid>  
+                        </b:row>
+                    </f:facet>
+                </b:panel>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+

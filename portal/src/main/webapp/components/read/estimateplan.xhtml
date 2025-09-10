@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/XHtml.xhtml to edit this template
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html">
+    <ui:component>
+
+        <b:panel id="estimatehistoryPanel" look="default" collapsible="false" style="font-size: 14px !important;">
+            <b:panelGrid colSpans="12" size="lg" styleClass="ui-fluid">
+                <b:panel look="primary" collapsible="false">
+                    <f:facet name="heading">
+                        <h:outputText value="Application"/>
+                    </f:facet>
+                    <b:panelGrid colSpans="12" size="lg" styleClass="ui-fluid">
+                        <b:formGroup>
+                            <p:outputLabel value="ATR Reference No:" style="margin-right: 10px;"/>
+                            <h:outputText value="#{sharedBean.entity.caseNum}" styleClass="no-bg"/>
+
+                        </b:formGroup>
+                        <b:formGroup>
+                            <p:outputLabel value="Allocated Manager:" style="margin-right: 10px;"/>
+                            <h:outputText value="#{sharedBean.entity.applicantName}" styleClass="no-bg"/>
+                        </b:formGroup>
+                        <b:formGroup>
+                            <p:outputLabel value="Status" style="margin-right: 10px;"/>
+                            <h:outputText value="#{sharedBean.entity.status.toString()}" styleClass="no-bg"/>
+                        </b:formGroup>
+                        <b:formGroup>
+                            <p:outputLabel value="Applicant Name:" style="margin-right: 10px;"/>
+                            <h:outputText value="#{sharedBean.entity.applicantName}" styleClass="no-bg"/>
+                        </b:formGroup>
+                    </b:panelGrid>
+                </b:panel>
+            </b:panelGrid>
+
+            <b:panelGrid colSpans="12" size="lg" styleClass="ui-fluid">
+                <b:panel look="primary" collapsible="false">
+                    <f:facet name="heading">
+                        <h:outputText value="Plan Details"/>
+                    </f:facet>
+                    <p:separator/>
+                    <b:panelGrid colSpans="12" size="lg" styleClass="ui-fluid">
+                        <b:formGroup>
+                            <p:outputLabel value="Choose Complexity Level"/>
+                            <p:inputText readonly="true" value="#{sharedBean.entity.estimatePlan.chargeOutRateCategory.chargeCategory.toString()}"/>
+                        </b:formGroup>
+                        <b:formGroup>
+                            <!-- Placeholder for any additional controls -->
+                        </b:formGroup>
+                    </b:panelGrid>
+
+
+                    <b:panelGrid  colSpans="12" size="lg" styleClass="ui-fluid">
+                        <ui:repeat  value="#{sharedBean.getItemsGroupedByCategory(sharedBean.entity.estimatePlan).entrySet()}" var="activity" varStatus="loop">
+                            <p:dataTable  value="#{activity.value}" var="item" 
+                                          styleClass="p-datatable-gridlines" rowStyleClass="item-row">
+                                <p:column headerText="#{activity.key.toString()}">
+                                    #{item.description} [#{item.activityType.toString()}]
+                                </p:column>
+
+                                <p:column headerText="Consultant Hours">
+                                    <p:inputNumber readonly="true" value="#{item.consultantHours}" 
+                                                   styleClass="hours-input"/>
+                                </p:column>
+
+                                <p:column headerText="Manager Hours">
+                                    <p:inputNumber readonly="true" value="#{item.managerHours}" 
+                                                   styleClass="hours-input"/>
+                                </p:column>
+
+                                <p:column  headerText="Total Hours">
+                                    <p:inputNumber readonly="true" id="item-total-#{item.id}" value="#{item.totalHours}" 
+                                                   styleClass="hours-input"/>
+
+                                </p:column>
+                                <p:column  headerText="Subtotal">
+                                    <h:outputText  value="#{item.totalAmount}">
+                                        <f:convertNumber type="currency" currencySymbol="R"/>
+                                    </h:outputText>
+                                </p:column>
+                            </p:dataTable>
+                        </ui:repeat>
+                        <p:separator/>
+                        <p:outputPanel>
+                            <b:panelGrid  colSpans="4,2,6" size="lg" styleClass="ui-fluid">
+                                <b:formGroup>
+                                    <!-- Empty column for layout -->
+                                </b:formGroup>
+                                <b:formGroup>
+                                    <p:outputLabel value="Total Hours" styleClass="font-weight-bold"/>
+                                    <div class="col-12 md:col-4">
+                                        <div class="ui-inputgroup-externalComponent">
+                                            <p:inputText readonly="true" value="#{sharedBean.entity.estimatePlan.totalHours}" 
+                                                         styleClass="form-control text-right font-weight-bold"/>
+                                            <div class="ui-inputgroup-addon">Hrs</div>
+                                        </div>
+                                    </div>
+                                </b:formGroup>
+                                <b:formGroup>
+                                    <p:outputLabel value="Sub Total" styleClass="font-weight-bold"/>
+                                    <div class="col-12 md:col-4">
+                                        <div class="ui-inputgroup">
+                                            <div class="ui-inputgroup-addon">R</div>
+                                            <p:inputText readonly="true"
+                                                         value="#{sharedBean.entity.estimatePlan.subtotalFee}" 
+                                                         >
+                                                <f:convertNumber type="currency" currencySymbol="R"/>
+                                            </p:inputText>
+
+                                        </div>
+                                    </div>
+                                </b:formGroup>
+                            </b:panelGrid>
+                            <b:panelGrid colSpans="4,8" size="lg" styleClass="ui-fluid">
+                                <b:formGroup>
+                                    <!-- Empty column for layout -->
+                                </b:formGroup>
+                                <b:formGroup>
+                                    <p:outputLabel value="Travel Expense"/>
+                                    <div class="col-12 md:col-4">
+                                        <div class="ui-inputgroup">
+                                            <div class="ui-inputgroup-addon">R</div>
+                                            <p:inputText readonly="true" value="#{sharedBean.entity.estimatePlan.travelExp}"/>
+                                        </div>
+                                    </div>
+                                </b:formGroup>
+                            </b:panelGrid>
+                            <b:panelGrid colSpans="4,8" size="lg" styleClass="ui-fluid">
+                                <b:formGroup>
+                                    <!-- Empty column for layout -->
+                                </b:formGroup>
+                                <b:formGroup>
+                                    <p:outputLabel value="External Resource"/>
+                                    <div class="col-12 md:col-4">
+                                        <div class="ui-inputgroup">
+                                            <div class="ui-inputgroup-addon">R</div>
+                                            <p:inputText readonly="true" value="#{sharedBean.entity.estimatePlan.externalResource}"/>
+                                        </div>
+                                    </div>
+                                </b:formGroup>
+                            </b:panelGrid>
+                            <b:panelGrid colSpans="4,2,6" size="lg" styleClass="ui-fluid">
+                                <b:formGroup>
+                                    <!-- Empty column for layout -->
+                                </b:formGroup>
+                                <b:formGroup>
+                                    <p:outputLabel value="Time To Complete" styleClass="font-weight-bold text-muted"/>
+                                    <div class="col-12 md:col-4">
+                                        <div class="ui-inputgroup">
+                                            <p:inputText readonly="true" value="#{sharedBean.entity.estimatePlan.daysToComplete}" 
+                                                         placeholder="number of days"/>
+
+                                            <div class="ui-inputgroup-addon">Days</div>
+                                        </div>
+                                    </div>
+                                </b:formGroup>
+                                <b:formGroup>
+                                    <p:outputLabel value="Grand Total" styleClass="font-weight-bold"/>
+                                    <div class="col-12 md:col-4">
+                                        <div class="ui-inputgroup">
+                                            <div class="ui-inputgroup-addon">R</div>
+                                            <p:inputText readonly="true" value="#{sharedBean.entity.estimatePlan.grandTotal}" 
+                                                         styleClass="form-control text-right font-weight-bold"/>
+                                        </div>
+                                    </div>
+                                </b:formGroup>
+                            </b:panelGrid>
+                            <p:separator/>
+                            <b:panelGrid colSpans="4,2,6" size="lg" styleClass="ui-fluid">
+                                <b:formGroup>
+                                    <p:outputLabel value="Estimation Range"/>
+                                </b:formGroup> 
+                                <b:formGroup>
+                                    <p:outputLabel value="Fee Range Minimum"/>
+                                    <div class="col-12 md:col-4">
+                                        <div class="ui-inputgroup">
+                                            <div class="ui-inputgroup-addon">R</div>
+                                            <p:inputText readonly="true" maxlength="18" value="#{sharedBean.entity.estimatePlan.chargeOutRateCategory.feeRangeMin}">
+                                                <f:convertNumber type="currency" currencySymbol="R"/>
+                                            </p:inputText>
+                                        </div>
+                                    </div>
+                                </b:formGroup>
+                                <b:formGroup>
+                                    <p:outputLabel value="Fee Range Maximum"/>
+                                    <div class="col-12 md:col-4">
+                                        <div class="ui-inputgroup">
+                                            <div class="ui-inputgroup-addon">R</div>
+                                            <p:inputText readonly="true"  maxlength="18" value="#{sharedBean.entity.estimatePlan.chargeOutRateCategory.feeRangeMax}" 
+                                                         >
+                                                <f:convertNumber type="currency" currencySymbol="R"/>
+                                            </p:inputText>
+                                        </div>
+                                    </div>
+                                </b:formGroup>
+                            </b:panelGrid>
+
+                            <p:separator/>
+
+                            <b:panelGrid colSpans="4,2,6" size="lg" styleClass="ui-fluid">
+                                <b:formGroup>
+                                    <p:outputLabel value="Deposit Details"/>
+                                </b:formGroup> 
+                                <b:formGroup>
+                                    <p:outputLabel value="Deposit Percentage"/>
+                                    <div class="col-12 md:col-4">
+                                        <div class="ui-inputgroup">
+                                            <p:inputText readonly="true" value="#{sharedBean.entity.estimatePlan.depositPercentage*100}" />
+                                            <div class="ui-inputgroup-addon">%</div>
+                                        </div>
+                                    </div>
+                                </b:formGroup>
+                                <b:formGroup>
+                                    <p:outputLabel value="Deposit Amount"/>
+                                    <div class="col-12 md:col-4">
+                                        <div class="ui-inputgroup">
+                                            <div class="ui-inputgroup-addon">R</div>
+                                            <p:inputText readonly="true" value="#{sharedBean.entity.estimatePlan.depositAmount}" 
+                                                         >
+                                                <f:convertNumber type="currency" currencySymbol="R"/>
+                                            </p:inputText>
+                                        </div>
+                                    </div>
+                                </b:formGroup>
+                            </b:panelGrid>
+                        </p:outputPanel>
+                    </b:panelGrid>
+                </b:panel> 
+            </b:panelGrid>  
+            <f:facet name="footer">
+                <b:row>
+                    <b:panelGrid colSpans="4,4,4" size="lg" styleClass="ui-fluid">
+                        <b:commandButton large-screen="full-width" size="lg" look="success" value="Accept" icon="check"  action="#{sharedBean.accept(sharedBean.entity)}"  update="@form" />
+                        <b:commandButton large-screen="full-width" size="lg" look="warning" value="Reject" iconAwesome="window-close" action="#{sharedBean.reject(sharedBean.entity)}" update="@form" immediate="true"/>
+                        <b:commandButton large-screen="full-width" size="lg" look="danger" value="Cancel" iconAwesome="window-close" action="#{sharedBean.cancel()}"  immediate="true" process="@this" update="@form"/>
+                    </b:panelGrid>
+
+                </b:row>
+            </f:facet>
+        </b:panel>
+    </ui:component>
+</html>
+

@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/XHtml.xhtml to edit this template
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html">
+    <ui:component>
+
+        <b:panel id="summaryPanel" look="default" collapsible="false" style="font-size: 14px !important;">
+            <b:panel title="Application details" look="primary" collapsible="false">
+                <p:panelGrid columns="4" styleClass="ui-panelgrid-blank" style="width:100%;">
+                    <h:outputLabel value="Tax Ref Number:" styleClass="no-bg"/>
+                    <h:outputText value="#{sharedBean.entity.incomeTaxReference}" styleClass="no-bg"/>
+                    <h:outputLabel value="ATR Reference Number:" styleClass="no-bg"/>
+                    <h:outputText value="#{sharedBean.entity.caseNum}" styleClass="no-bg"/>
+
+                    <h:outputLabel value="Application Status:" styleClass="no-bg"/>
+                    <h:outputText value="#{sharedBean.entity.status.toString()}" styleClass="no-bg"/>
+                    <h:outputLabel value="Status comment:" styleClass="no-bg"/>
+                    <h:outputText value="#{sharedBean.entity.status.toString()}" styleClass="no-bg"/>
+
+                </p:panelGrid>
+            </b:panel>
+            <b:panel title="Applicant Details" look="primary" collapsible="false">
+                <p:panelGrid columns="4" styleClass="ui-panelgrid-blank" style="width:100%;">
+                    <h:outputLabel value="Applicant Name:" styleClass="no-bg"/>
+                    <h:outputText value="#{sharedBean.entity.applicantName}" styleClass="no-bg"/>
+                    <h:outputLabel value="Applicant Type:" styleClass="no-bg"/>
+                    <h:outputText value="#{sharedBean.entity.representativeType.toString()}" styleClass="no-bg"/>
+
+                    <h:outputLabel value="Resident of the Republic:" styleClass="no-bg"/>
+                    <h:outputText value="#{sharedBean.entity.saResident.toString()}" styleClass="no-bg"/>
+                    <h:outputLabel value="Is SMME or Natural Person:" styleClass="no-bg"/>
+                    <h:outputText value="#{sharedBean.naturalPerson}" styleClass="no-bg"/>
+                </p:panelGrid>
+            </b:panel>
+            <b:panel title="Representative / Third Party Contact Details" look="primary" collapsible="false">
+                <p:panelGrid columns="4" styleClass="ui-panelgrid-blank" style="width:100%;">
+                    <h:outputLabel value="Name:" styleClass="no-bg"/>
+                    <h:outputText value="#{sharedBean.userDetail.fullName}" styleClass="no-bg"/>
+                    <h:outputLabel value="Cellphone:" styleClass="no-bg"/>
+                    <h:outputText value="#{sharedBean.userDetail.cellphone}" styleClass="no-bg"/>
+
+                    <h:outputLabel value="Capacity:" styleClass="no-bg"/>
+                    <h:outputText value="#{sharedBean.entity.representativeType.toString()}" styleClass="no-bg"/>
+                    <h:outputLabel value="Landline:" styleClass="no-bg"/>
+                    <h:outputText value="#{sharedBean.userDetail.telephone}" styleClass="no-bg"/>
+
+                    <h:outputLabel value="Email Address:" styleClass="no-bg"/>
+                    <h:outputText value="#{sharedBean.userDetail.emailAddress}" styleClass="no-bg"/>
+                    <h:outputText value="" styleClass="no-bg"/>
+                </p:panelGrid>
+            </b:panel>
+            <b:panel title="eFiler Contact Details" look="primary" collapsible="false">
+                <p:panelGrid columns="4" styleClass="ui-panelgrid-blank" style="width:100%;">
+                    <h:outputLabel value="Name:" styleClass="no-bg"/>
+                    <h:outputText value="#{sharedBean.userDetail.fullName}" styleClass="no-bg"/>
+                    <h:outputLabel value="ID/Passport Number:" styleClass="no-bg"/>
+                    <h:outputText rendered="#{sharedBean.userDetail.passPortNumber eq null}" value="#{sharedBean.userDetail.idNumber}" styleClass="no-bg"/>
+                    <h:outputText rendered="#{sharedBean.userDetail.passPortNumber ne null}" value="#{sharedBean.userDetail.passPortNumber}" styleClass="no-bg"/>
+
+                    <h:outputLabel value="Cellphone:" styleClass="no-bg"/>
+                    <h:outputText value="#{sharedBean.userDetail.cellphone}" styleClass="no-bg"/>
+                    <h:outputText value="" styleClass="no-bg"/>
+                </p:panelGrid>
+            </b:panel>
+            <b:panel title="Estimation" look="primary" collapsible="false">
+                <p:panelGrid columns="2"  styleClass="ui-panelgrid-blank" style="width:100%;">
+                    <h:outputLabel value="Estimation Date:" styleClass="no-bg"/>
+                    <h:outputText value="#{sharedBean.getCurrentEstimatePlan(sharedBean.entity).createdDate}" styleClass="no-bg"/>
+                    <h:outputLabel value="Estimated Period:" styleClass="no-bg"/>
+                    <h:outputText value="#{sharedBean.getCurrentEstimatePlan(sharedBean.entity).daysToComplete} Work Business Days" styleClass="no-bg"/>
+                    <h:outputLabel value="Estimated Range" styleClass="no-bg"/>
+                    <h:outputText value="#{sharedBean.getCurrentEstimatePlan(sharedBean.entity).chargeOutRateCategory.feeRangeMin} - #{sharedBean.getCurrentEstimatePlan(sharedBean.entity).chargeOutRateCategory.feeRangeMax}" styleClass="no-bg"/>
+                    <h:outputLabel value="Advanced Payment" styleClass="no-bg"/>
+                    <h:outputText value="#{sharedBean.getCurrentEstimatePlan(sharedBean.entity).depositAmount}" styleClass="no-bg"/>
+                </p:panelGrid>
+                 <p:panelGrid columns="1"  styleClass="ui-panelgrid-blank" style="width:100%;">
+                    <h:outputText value="Note: If you fail to accept the estimated fee within 15 days your application will be rejected without refund
+                                   of the application fee." styleClass="no-bg"/>
+                    <h:outputText value="You must read and sign an engagement letter before you may proceed:" styleClass="no-bg"/>
+                    <p:commandLink value="Click here to view your engagement letter" ajax="false">
+                        <p:fileDownload value="#{sharedBean.file}" />
+                    </p:commandLink>
+                    <h:panelGroup layout="block" style="display:inline-block; text-align:left;">
+                        <p:selectBooleanCheckbox value="#{sharedBean.getCurrentEstimatePlan(sharedBean.entity).letterConditions}" id="acceptLetter" required="true" requiredMessage="Please read and Sign Engagement Letter before you can continue">
+                        </p:selectBooleanCheckbox>
+                        <h:outputLabel for="acceptLetter" value="I have read and signed the engagement letter. The letter will be scanned and uploaded
+                                       on this application or alternatively faxed to the SARS ATR Unit. The Unit's fax number is 012 422 4923.
+                                       I further undeestand that work on the application will not commence before the letter of engagement and estimation
+                                       (deposit) fee has been received by the Unit." style="margin-left:5px;font-weight: normal !important;"/>
+                    </h:panelGroup>
+                </p:panelGrid>
+            </b:panel>
+            <b:panel title="Next Steps" look="info" collapsible="false" rendered="#{sharedBean.entity.status.toString() eq 'SANITISED_RULING_ACCEPTED'}">
+                                    <p:panelGrid columns="1"  styleClass="ui-panelgrid-blank" style="width:100%;">
+                                    <ul>
+                                        <li><span style="font-weight: bold;">Click Invoices on the menu.</span></li>
+                                        <li><span style="font-weight: bold;">Pay the outstanding amount as indicated on the invoice.</span></li>
+                                        <li><span style="font-weight: bold;">Access the ruling letter by clicking Rulings.</span></li>
+                                    </ul>
+                                        <h:outputLabel value="NOTE: The ruling letter will only be accessible once the amount payable has been settled in full." styleClass="no-bg"/>
+                                    </p:panelGrid>
+                                </b:panel>
+            <f:facet name="footer" rendered="#{sharedBean.entity.status.toString() eq 'ESTIMATE_PUBLISHED'}">
+                <b:row>
+                    <b:panelGrid colSpans="4,4,4" size="lg" styleClass="ui-fluid">
+                        <b:commandButton large-screen="full-width" size="lg" look="success" value="Accept" icon="check"  action="#{sharedBean.accept(sharedBean.entity)}"  update="@form" />
+                        <b:commandButton large-screen="full-width" size="lg" look="warning" value="Reject" iconAwesome="window-close" action="#{sharedBean.reject(sharedBean.entity)}" update="@form" immediate="true"/>
+                        <b:commandButton large-screen="full-width" size="lg" look="danger" value="Cancel" iconAwesome="window-close" action="#{sharedBean.cancel()}"  immediate="true" process="@this" update="@form"/>
+                    </b:panelGrid>
+
+                </b:row>
+            </f:facet>
+        </b:panel>
+
+    </ui:component>
+</html>

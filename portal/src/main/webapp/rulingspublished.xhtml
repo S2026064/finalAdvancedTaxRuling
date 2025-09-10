@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:o="http://omnifaces.org/ui">
+    <h:body>
+        <ui:composition template="/template/template.xhtml">
+            <ui:define name="maincontent">
+                <b:panel rendered="#{rulingPublishedBean.list}" look="default"  collapsible="false">
+                    <f:facet name="heading">
+                        <b:panelGrid colSpans="12" size="lg" styleClass="ui-fluid">
+                            <p:outputLabel value=" Rulings" styleClass="panel-title-css"/>
+                        </b:panelGrid>
+                    </f:facet>
+                    <p:dataTable rowIndexVar="rowIndex"  globalFilterOnly="true"  widgetVar="confirmationTable" value="#{rulingPublishedBean.atrApplications}" var="app" paginator="true"  paginatorAlwaysVisible="false" reflow="true" rows="15">
+                        <f:facet name="header">                          
+                            <p:toolbar>
+
+                                <p:toolbarGroup align="right">
+                                    <p:inputText placeholder="Filter by all fields" id="globalFilter" style="width:30rem" onkeyup="PF('applicationTable').filter()"/>
+                                </p:toolbarGroup>
+                            </p:toolbar>
+                        </f:facet>
+                        <p:column headerText="ATR ref. no.">
+                            <h:outputText value="#{app.caseNum}"/>
+                        </p:column>
+                        <p:column headerText="Applicant name">
+                            <h:outputText value="#{app.applicantName}"/>
+                        </p:column>
+                        <p:column headerText="Status">
+                            <h:outputText value="#{app.status.toString()}"/>
+                        </p:column>
+                        <p:column headerText="Date">
+                            <h:outputText value="#{app.createdDate}">
+                                <f:convertDateTime  pattern="dd MMMM yyyy"/>
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="Ruling Type">
+                            <h:outputText value="#{app.rulingType.toString()}"/>
+                        </p:column>
+                        <p:column headerText="Action" styleClass="large">
+                            <p:commandButton styleClass="ui-button-raised ui-button-primary btn-size-sm" action="#{rulingPublishedBean.review(app)}"  value="Review" rendered="#{rulingPublishedBean.statuses.contains(app.status)}"  update="@form"/>
+                            <p:spacer width="5px"/>
+                        </p:column>     
+                    </p:dataTable>
+                </b:panel>
+                <b:panel rendered="#{rulingPublishedBean.add}" look="default" collapsible="false" title="Online application for an Advanced Tax Ruling">
+                    <f:facet name="heading">
+                        <b:panelGrid colSpans="12" size="lg" styleClass="ui-fluid">
+                            <p:outputLabel  styleClass="panel-title-css"/>
+                        </b:panelGrid>
+                    </f:facet>
+                    <p:tabView id="tabView" activeIndex="#{rulingPublishedBean.tabIndex}">
+                        <p:tab   title="Pre-screening">
+                            <o:massAttribute name="readonly" value="true">
+                                <ui:include src="/components/read/prescreening.xhtml">
+                                    <ui:param name="sharedBean" value="#{rulingPublishedBean}"/>
+                                </ui:include>
+                            </o:massAttribute>
+                        </p:tab>
+                        <p:tab   title="Application form">
+                            <o:massAttribute name="readonly" value="true">
+                                <ui:include src="/components/read/applicationform.xhtml">
+                                    <ui:param name="sharedBean" value="#{rulingPublishedBean}"/>
+                                </ui:include>
+                            </o:massAttribute>
+                        </p:tab>
+                        <p:tab   title="Summary">
+                            <o:massAttribute name="readonly" value="true">
+                                <ui:include src="/components/read/summary.xhtml">
+                                    <ui:param name="sharedBean" value="#{rulingPublishedBean}"/>
+                                </ui:include>
+                            </o:massAttribute>
+                        </p:tab>
+                        <p:tab id="ruling" title="Published Ruling" >
+                            <b:panel>
+
+
+                                <o:massAttribute name="readonly" value="false" >
+                                    <ui:include src="/components/read/reviewruling.xhtml">
+                                        <ui:param name="sharedBean" value="#{rulingPublishedBean}"/>
+                                    </ui:include>
+
+                                </o:massAttribute>
+                                <p:dialog header="Application Withdrawal" id="withdrawDialog" widgetVar="withdrawDialog" height="500" width="1400" showEffect="fade" closeOnEscape="true" responsive="true" modal="true" >
+                                    <o:massAttribute name="readonly" value="false" >
+                                        <ui:include src="/components/write/withdrawalreason.xhtml">
+                                            <ui:param name="sharedBean" value="#{rulingPublishedBean}"/>
+                                        </ui:include>
+                                    </o:massAttribute>
+                                </p:dialog>
+
+
+                                <f:facet name="footer">
+                                    <b:row>
+                                        <b:panelGrid colSpans="3,3,3,3" size="lg" styleClass="ui-fluid" rendered="#{rulingPublishedBean.entity.status ne 'REQUEST_WITHDRAWAL_DRAFT_RULING' and rulingPublishedBean.entity.status ne 'REQUEST_WITHDRAWAL_SANITISED_RULING'}">
+                                            <b:commandButton large-screen="full-width" size="lg" value="Accept" action="#{rulingPublishedBean.accept(rulingPublishedBean.entity)}" icon="check" look="success" immediate="true" update="@form" disabled="#{rulingPublishedBean.entity.status eq 'RULING_PUBLISHED_PENDING_OUTSTANDING_AMOUNT'}"/>
+                                            <b:commandButton large-screen="full-width" size="lg"  value="Feedback" action="#{rulingPublishedBean.addFeedback(rulingPublishedBean.entity)}" immediate="true" update="@form" icon="envelope" look="primary" disabled="#{rulingPublishedBean.entity.status eq 'RULING_PUBLISHED_PENDING_OUTSTANDING_AMOUNT'}"/>
+                                            <b:commandButton large-screen="full-width" size="lg"  value="Request Withdrawal" type="button" icon="remove" onclick="PF('withdrawDialog').show()" look="warning" disabled="#{rulingPublishedBean.entity.status eq 'RULING_PUBLISHED_PENDING_OUTSTANDING_AMOUNT'}"/>
+                                            <b:commandButton large-screen="full-width" size="lg"  value="Cancel" icon="remove" action="#{rulingPublishedBean.cancel(rulingPublishedBean.entity)}"  look="danger"  immediate="true" update="@form"/>
+                                        </b:panelGrid>
+
+                                        <b:panelGrid colSpans="6,6" size="lg" styleClass="ui-fluid" rendered="#{rulingPublishedBean.entity.status eq 'REQUEST_WITHDRAWAL_DRAFT_RULING' or rulingPublishedBean.entity.status eq 'REQUEST_WITHDRAWAL_SANITISED_RULING'}">
+                                            <b:commandButton large-screen="full-width" size="lg" value="Reinstate" action="#{rulingPublishedBean.reInstate(rulingPublishedBean.entity)}" icon="check" look="success" immediate="true" update="@form" disabled="#{rulingPublishedBean.entity.status eq 'RULING_PUBLISHED_PENDING_OUTSTANDING_AMOUNT'}"/>
+                                            <b:commandButton large-screen="full-width" size="lg"  value="Cancel" icon="remove" action="#{rulingPublishedBean.cancel(rulingPublishedBean.entity)}"  look="danger"  immediate="true" update="@form" />
+                                        </b:panelGrid>
+                                    </b:row>
+                                </f:facet>
+                            </b:panel>
+                        </p:tab>
+                    </p:tabView>
+                </b:panel>
+                <b:panel rendered="#{rulingPublishedBean.feedbackPanel}" look="default" collapsible="false" title="Feedback for: #{rulingPublishedBean.entity.caseNum}">
+                    <o:massAttribute name="readonly" value="false" >
+                        <ui:include src="/components/write/feedback.xhtml">
+                            <ui:param name="sharedBean" value="#{rulingPublishedBean}"/>
+                        </ui:include>
+                    </o:massAttribute>
+                </b:panel>
+            </ui:define>
+        </ui:composition>
+
+    </h:body>
+</html>

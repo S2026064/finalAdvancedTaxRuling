@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:o="http://omnifaces.org/ui">
+    <h:body>
+        <ui:composition template="/template/template.xhtml">
+            <ui:define name="maincontent">
+                <b:panel rendered="#{estimationPublishedBean.list}" look="default" collapsible="false">
+                    <f:facet name="heading">
+                        <b:panelGrid colSpans="12" size="lg" styleClass="ui-fluid">
+                            <p:outputLabel value="Applications" styleClass="panel-title-css"/>
+                        </b:panelGrid>
+                    </f:facet>
+                    <p:dataTable rowIndexVar="rowIndex" globalFilterOnly="true" widgetVar="confirmationTable" 
+                                 value="#{estimationPublishedBean.atrApplications}" var="selectedApplication" 
+                                 paginator="true" paginatorAlwaysVisible="false" reflow="true" rows="15">
+                        <f:facet name="header">                          
+                            <p:toolbar>
+                                <p:toolbarGroup align="right">
+                                    <p:inputText placeholder="Filter by all fields" id="globalFilter" 
+                                                 style="width:30rem" onkeyup="PF('applicationTable').filter()"/>
+                                </p:toolbarGroup>
+                            </p:toolbar>
+                        </f:facet>
+                        <p:column headerText="ATR ref. no.">
+                            <h:outputText value="#{selectedApplication.caseNum}"/>
+                        </p:column>
+                        <p:column headerText="Allocated Manager">
+
+                        </p:column>
+                        <p:column headerText="Status">
+                            <h:outputText value="#{selectedApplication.status.toString()}"/>
+                        </p:column>
+                        <p:column headerText="Date">
+                            <h:outputText value="#{selectedApplication.createdDate}">
+                                <f:convertDateTime pattern="dd MMMM yyyy"/>
+                            </h:outputText>
+                        </p:column>
+                        <p:column styleClass="large" headerText="Action">
+                            <b:commandButton  styleClass="ui-button-raised ui-button-primary btn-size-sm" 
+                                              look="primary" size="md" icon-size="md" iconBrand="5.2.0" 
+                                              iconAwesome="fa-plus" value="View" 
+                                              action="#{estimationPublishedBean.reviewEstimatePlan(selectedApplication)}"  
+                                              update="@form"/>
+                        </p:column>     
+                    </p:dataTable>
+                </b:panel>
+                <b:panel rendered="#{estimationPublishedBean.add}" look="default" collapsible="false">
+                    <f:facet name="heading">
+                        <p:outputLabel value="Create Estimate Plan - Detail" styleClass="panel-title-css"/>
+                    </f:facet>
+
+                    <p:tabView id="tabView" activeIndex="#{estimationPublishedBean.tabIndex}">
+                        <p:tab title="Pre-screening">
+                            <o:massAttribute name="readonly" value="true">
+                                <ui:include src="/components/read/prescreening.xhtml">
+                                    <ui:param name="sharedBean" value="#{estimationPublishedBean}"/>
+                                </ui:include>
+                            </o:massAttribute>
+                        </p:tab>
+
+                        <p:tab title="Application form">
+                            <o:massAttribute name="readonly" value="true">
+                                <ui:include src="/components/read/applicationform.xhtml">
+                                    <ui:param name="sharedBean" value="#{estimationPublishedBean}"/>
+                                </ui:include>
+                            </o:massAttribute>
+                        </p:tab>
+
+                        <p:tab title="Summary">
+                            <ui:include src="/components/read/summary.xhtml">
+                                <ui:param name="sharedBean" value="#{estimationPublishedBean}"/>
+                            </ui:include>
+                        </p:tab>
+
+                    </p:tabView> 
+
+                </b:panel>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+

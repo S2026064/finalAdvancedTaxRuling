@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/XHtml.xhtml to edit this template
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html">
+    <ui:component>
+
+        <b:panel look="default" collapsible="false">
+            <b:panelGrid colSpans="12" styleClass="ui-fluid">
+                <b:panel look="primary" title="Upload Draft Ruling document" collapsible="false">
+                    <p:fileUpload onstart="PF('blockUI').block()" listener="#{sharedBean.handleFileUpload}"   oncomplete="PF('blockUI').unblock()"   auto="true"  mode="advanced" dragDropSupport="false"  update="tabView:attach" sizeLimit="8000000" fileLimit="3" allowTypes="/(\.|\/)(gif|jpe?g|png|pdf|doc|docx|xls|xlsx|xlsm|mp4|avi|flv|mkv|wmv|mov)$/i"/>
+                </b:panel>
+                <p:outputPanel id="attach">
+                    <p:separator rendered="true"/>  
+                    <b:panel look="primary" title="List of documents" collapsible="false">
+                        <b:panelGrid colSpans="2,3,3,2,2" size="lg" styleClass="ui-fluid">
+                            <p:outputLabel value="Date"/>
+                            <p:outputLabel value="Description"/>
+                            <p:outputLabel value="Document Type"/>
+                            <p:outputLabel value="Size"/>
+                            <p:outputLabel value="Action"/>
+                        </b:panelGrid>                    
+                        <p:separator/>
+                        <ui:repeat value="#{sharedBean.entity.supportingDocuments}" var="document" varStatus="documentVarStatus">
+                            <b:panelGrid colSpans="2,3,3,2,2" size="lg" styleClass="ui-fluid">
+                                <b:formGroup>
+                                    <h:outputText value="#{document.createdDate}" styleClass="customCSS">
+                                        <f:convertDateTime   pattern="dd MMMM yyyy"/>
+                                    </h:outputText>
+                                </b:formGroup>
+                                <b:formGroup>
+                                    <h:outputText value="#{document.description}" styleClass="customCSS"/>
+                                </b:formGroup>
+                                <b:formGroup>
+                                    <h:outputText value="#{document.documentType.toString()}" styleClass="customCSS"/> 
+                                </b:formGroup>
+                                <b:formGroup>
+                                    <h:outputText value="#{document.documentSize}" styleClass="customCSS"/>
+                                </b:formGroup>
+                                <b:formGroup>
+                                    <b:panelGrid colSpans="12" size="lg" styleClass="ui-fluid">
+                                        <p:commandButton    styleClass="btn-size-sm"  value="Download" actionListener="#{sharedBean.fileDownload(document)}"  ajax="false" immediate="true"  update="@form">
+                                            <p:fileDownload  value="#{sharedBean.downloadFile}"/>
+                                        </p:commandButton>
+                                        <p:commandButton styleClass="ui-button-danger btn-size-sm"  value="Delete"  immediate="true" update="@form"/>
+                                    </b:panelGrid>
+                                </b:formGroup>
+                            </b:panelGrid>
+                            <p:separator/> 
+                        </ui:repeat>
+                    </b:panel>
+
+                </p:outputPanel>
+            </b:panelGrid>
+            <f:facet name="footer">
+                <b:row>
+                    <b:panelGrid colSpans="6,6" size="lg" styleClass="ui-fluid">
+                        <b:commandButton large-screen="full-width" size="lg" value="Submit" action="#{sharedBean.feedback(sharedBean.entity)}" icon="check" look="success"  update="@form" />
+                        <b:commandButton large-screen="full-width" size="lg"  value="Cancel" icon="remove"  look="danger"  immediate="true" update="@form" />
+                    </b:panelGrid>
+                </b:row>
+            </f:facet>
+        </b:panel>
+    </ui:component>
+</html>

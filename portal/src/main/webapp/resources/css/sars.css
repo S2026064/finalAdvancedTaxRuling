@@ -1,0 +1,738 @@
+@import url(//fonts.googleapis.com/css?family=Open+Sans);
+body{
+    font-family: Arial, Helvetica, sans-serif;
+    font-size:1.2em;
+    margin:0 auto;
+    background-color:#fff;
+}
+.headerfontsize{
+    font-size: 0.95em;
+}
+.ui-datatable{
+    border-color:#428bca;
+    font-weight: 400 !important;
+    font-size:12px !important;
+    color:#d9534f;
+    vertical-align: middle !important;
+}
+body .ui-datatable .ui-datatable-data>tr>td {
+    border-bottom: 1px solid #c8c8c8 !important;
+    border-top: 1px solid #c8c8c8 !important;
+    border-left: none;
+    border-right: none;
+}
+body .ui-datatable .ui-datatable-header {
+    border-bottom: 1px solid #c8c8c8 !important;
+    border-top: 1px solid #c8c8c8 !important;
+    border-left: none;
+    border-right: none;
+    text-align: left !important;
+    background-color: #428bca !important;
+}
+body .ui-datatable .ui-paginator {
+    border: none;
+    background-color: #428bca !important;
+    color: #fff !important;
+}
+body .ui-datatable .ui-selection-column .ui-chkbox-all {
+    margin:inherit !important;
+    width: 20px !important;
+    height: 20px !important;
+    padding-bottom: 2px !important;
+}
+.ui-datatable thead th{
+    border-bottom: 1px solid #c8c8c8 !important;
+    border-top: 1px solid #c8c8c8 !important;
+    border-left: none;
+    border-right: none;
+    text-align: left !important;
+    text-transform: capitalize !important;
+    font-size:1.2em !important;
+    box-sizing: content-box;
+}
+.ui-datepicker td{
+    height:68px !important;
+    font-size:1.35em !important;
+}
+.ui-datepicker .ui-datepicker-calendar th{
+    font-size:1.1em !important;
+}
+.ui-datepicker-table{
+    font-size:1.35em !important;
+}
+.ui-datepicker-header{
+    font-size:1.35em !important;
+}
+.ui-datepicker-week-end{
+    font-size:1.35em !important;
+}
+.ui-datepicker-month{
+    font-size:1.35em !important;
+}
+.ui-datepicker-title{
+    font-size:1.35em !important;
+    color: #d9534f !important;
+    text-transform: capitalize !important;
+}
+.ui-inputfield{
+    height:45px !important;
+    font-size:1.35em !important;
+}
+.ui-inputfield.searchfield{
+    height:45px !important;
+    width: 150px !important;
+    font-size:1.35em !important;
+}
+.ui-fluid .ui-inputtext {
+    font-size:1.35em !important;
+}
+.ui-inputfield.textareacss{
+    height:80px !important;
+    font-size:1.35em !important;
+}
+.ui-inputtextarea{
+    font-size:1.35em !important;
+}
+.ui-selectonemenu{
+    height:45px !important;
+    font-size:1.35em !important;
+    font-weight: 300 !important;
+}
+.ui-selectonemenu-items{
+    font-size:1.35em !important;
+    font-weight: 300 !important;
+    color:#000 !important;
+    word-wrap: break-word;
+}
+.ui-menuitem{
+    font-size:1.35em !important;
+    font-weight: 400 !important;
+    font-weight: 300 !important;
+}
+.ui-panelgrid{
+    width: 100% !important;
+}
+.semesterStyle{
+    width: 50%;
+}
+.ui-panelgrid-header{
+    font-size: 1.2em !important;
+    text-transform: capitalize !important;
+    font-weight: bold !important;
+    color:#419641 !important;
+}
+.ui-separator{
+    color:#428bca !important;
+    height:10px !important;
+}
+.ui-panel-title{
+    text-align:center !important;
+    font-size:1.2em !important;
+    text-transform: capitalize !important;
+    font-weight: bold !important;
+    color:#428bca !important;
+}
+/*******************Toolbar css************************************************/
+.ui-toolbar{
+    border: none !important;
+    background:#F5F5F5 !important;
+    color:#D4AF37 !important;
+}
+.ui-toolbar.headerToolBarCss{
+    border: none !important;
+    background: #F5F5F5 !important;
+    color:#D4AF37 !important;
+}
+/***************************Button css*****************************************/
+.ui-button{
+    height: 55px !important;
+    font-size:1.35em !important;
+    padding: .1em .5em;
+    text-transform: capitalize
+}
+.btn-group-xs > .btn, .btn-xs {
+    padding: .25rem .4rem;
+    font-size: .875rem;
+    line-height: .5;
+    border-radius: .2rem;
+}
+.ui-button.btn-size-xs{
+    height: 30px !important;
+    font-size:0.95em !important;
+    text-transform:capitalize;
+    padding-bottom:.75em !important;
+}
+body .ui-wizard .ui-wizard-step-titles .ui-wizard-step-title.ui-state-highlight {
+    background: none;
+    color:#419641 !important;
+    font-weight: bold;
+    border-bottom:none;
+    border-left:1px solid #c8c8c8;
+    border-right:1px solid #c8c8c8;
+    border-top:1px solid #c8c8c8;
+}
+.ui-wizard-nav-next{
+    height: 30px !important;
+    font-size:0.95em !important;
+    text-transform:capitalize;
+    padding-bottom:.75em !important;
+}
+.ui-wizard-nav-back{
+    height: 30px !important;
+    font-size:0.95em !important;
+    text-transform:capitalize;
+    padding-bottom:.75em !important;
+}
+.ui-button.btn-size-sm{
+    height: 30px !important;
+    font-size:0.95em !important;
+    text-transform:capitalize;
+    padding-bottom:.75em !important;
+}
+.ui-button.btn-size-md{
+    height: 40px !important;
+    font-size:0.95em !important;
+    text-transform:capitalize;
+    padding: .3em .5em !important;
+}
+.ui-button.btn-size-lg{
+    height: 46px !important;
+    font-size:1.2em !important;
+    text-transform:capitalize;
+    padding: .3em .5em !important;
+}
+/*********************************Prime faces outputlabel css *****************/
+.ui-outputlabel{
+    font-size:1.4em !important;
+    text-transform: capitalize !important;
+    font-weight:500 !important;
+    font-style: normal !important;
+    color:#000 !important;
+}
+.ui-outputlabel .ui-outputlabel-rfi {
+    margin-left: .4em;
+    color: red;
+}
+/*.ui-outputpanel{
+    font-size:0.95em !important;
+}*/
+.searchConentCss{
+    font-size:1.0em !important;
+    color: #444 !important;
+}
+/****************************Prime faces checkbox css**************************/
+body .ui-chkbox .ui-chkbox-box{
+    width: 3.0rem !important;
+    height: 3.0rem !important;
+    padding-bottom: 2px !important;
+    vertical-align: middle !important;
+    text-align: center !important;
+}
+
+.ui-chkbox .ui-chkbox-label{
+    vertical-align: middle !important;
+    font-size:1.2em  !important;
+    text-transform: capitalize !important;
+}
+/*******************************Custom css*************************************/
+.select-Many-Checkbox{
+    vertical-align: middle !important;
+    font-size:1.2em  !important;
+    text-transform: capitalize !important;
+}
+/*******************************************************************************/
+.ui-selectonemenu-trigger{
+    background: #F5F5F5 !important;
+}
+.ui-dialog-titlebar{
+    background: #F5F5F5 !important;
+    border-color:#DCDCDC !important;
+    color: #2F4F4F !important;
+}
+.ui-dialog-titlebar-close{
+    color: #2F4F4F !important;
+}
+.ui-dialog-content{
+    font-size:1.35em  !important;
+}
+.ui-panelgrid .ui-panelgrid-cell{
+    background: #F5F5F5 !important;
+    border-color:#DCDCDC !important;
+}
+.ui-datalist{
+
+}
+.ui-datalist-content{
+    border: none !important;
+    font-size:1.2em  !important;
+    color: #2F4F4F !important;
+    font-weight: normal !important;
+}
+.ui-outputlabel.headercss{
+    text-align: left !important;
+    font-size:30px  !important;
+    text-transform: capitalize !important;
+    font-weight: bold !important;
+    color:#428bca !important;
+}
+.ui-outputlabel.dialoglabelcss{
+    color: #0081c2 !important;
+    font-weight: bold;
+    font-size:1.35em !important;
+}
+.ui-tabs{
+    background:none;
+}
+.ui-tabs-panel{
+    background:none;
+    border-color: #ddd !important;
+}
+.ui-tabs-header{
+    color:#23527c !important;
+    font-size:1.2em  !important;
+    text-transform:capitalize !important;
+    font-weight: bold !important;
+}
+.ui-tabs-nav{
+    /*background: #F5F5F5 !important;*/
+    font-size:1.2em  !important;
+    text-transform:capitalize !important;
+    font-weight: bold !important;
+}
+body .ui-tabs .ui-tabs-nav li.ui-tabs-header.ui-state-active a {
+    color:#007ad9 !important;
+}
+.ui-accordion .ui-accordion-header {
+    background: #DCDCDC !important;
+    color: #000 !important;
+    border: none ;
+    font-weight: 800;
+    font-size: 1.8em;
+}
+.ui-accordion .ui-accordion-header:focus {
+    background: #DCDCDC !important;
+}
+.ui-accordion .ui-accordion-header.ui-state-active{
+    background: #DCDCDC !important;
+    color: #000 !important;
+}
+.ui-accordion .ui-accordion-header a:hover {
+    background: -moz-linear-gradient(center top, rgba(255, 255, 255, 0.6),
+        rgba(255, 255, 255, 0)) repeat scroll 0 0 #C3D79C;
+    border: none;
+    box-shadow: 0 0 8px #000;
+    color: black;
+    font-weight: bold;
+}
+.ui-accordion .ui-accordion-content {
+    border-top: 0 none;
+    margin-bottom: 2px;
+    margin-top: 5px;
+    overflow: visible !important;
+    padding: 0 !important;
+    position: relative;
+    top: 1px;
+}
+.ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active{
+    background-color:#DCDCDC !important;
+    color:red !important;
+}
+.ui-selectlistbox-item ui-corner-all ui-state-highlight{
+    color:#23527C !important;
+}
+.ui-selectlistbox-item ui-corner-all ui-state-hover{
+    background-color:#23527C !important;
+}
+.medium{
+    width:55px;
+}
+.xmedium{
+    width:70px;
+}
+.large{
+    width:120px;
+}
+.xlarge{
+    width:140px;
+}
+.xxlarge{
+    width:180px;
+}
+.xxxlarge{
+    width:230px;
+}
+.xxxxlarge{
+    width:250px;
+}
+.small{
+    width:40px;
+}
+.questioncss{
+    width:42% !important;
+}
+.answercss{
+    width:58% !important;
+}
+.xsmall{
+    width:20px;
+}
+.ui-fluid .ui-fileupload .ui-button{
+    width:100% !important;
+    height:45px !important;
+}
+.ui-fileupload{
+    height: 45px !important;
+}
+body .ui-fileupload .ui-fileupload-buttonbar{
+    border:none !important;
+    background: #f4f4f4;
+    color: #333;
+    padding:0px !important;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+}
+.ui-fileupload-buttonbar {
+    border-color: #0081c2 !important;
+}
+.ui-fileupload-content {
+    display: none;
+    height: 45px !important;
+}
+.ui-fileupload-buttonbar .ui-fileupload-choose {
+    width:100% !important;
+}
+.ui-fileupload-buttonbar .ui-fileupload-upload {
+    width:100% !important;
+}
+.ui-fileupload-buttonbar .ui-fileupload-cancel {
+    width:100% !important;
+}
+body .ui-button.ui-button-text-icon-left .ui-icon{
+    display: none;
+}
+body .ui-steps .ui-steps-item {
+    width: 33.33%;
+}
+body .ui-state-highlight {
+    text-shadow: none !important;
+}
+body .ui-steps.custom {
+    margin-bottom: 15px;
+}
+body .ui-steps.custom .ui-steps-item .ui-menuitem-link {
+    height: 10px;
+    padding: 0 1em;
+    overflow: visible;
+    border: 1px solid #c8c8c8;
+    display: block;
+    background-color: #FFFFFF;
+}
+body .ui-steps.custom .ui-steps-item .ui-menuitem-link .ui-steps-number {
+    background-color: #0081c2;
+    color: #FFFFFF;
+    display: inline-block;
+    width: 30px;
+    border-radius: 10px;
+    margin-top: -10px;
+    margin-bottom: 10px;
+    position: relative;
+    top: -3px;
+}
+body .ui-steps.custom .ui-steps-item .ui-menuitem-link .ui-steps-title {
+    margin-top: -6px;
+}
+body .ui-steps.custom .ui-steps-item.ui-state-highlight .ui-menuitem-link .ui-steps-title {
+    color: #555;
+}
+body .ui-radiobutton .ui-radiobutton-box.ui-state-active .ui-icon-bullet{
+    background: #337ab7 !important;
+}
+.ui-selectoneradio{
+    font-weight: normal !important;
+    font-size:0.94em  !important;
+}
+body .ui-chkbox .ui-chkbox-box.ui-state-active{
+    color: #337ab7 !important;
+}
+.ui-outputlabel.panel-title-css{
+    text-align: left !important;
+    font-size:13px  !important;
+    font-weight: bold !important;
+    color:#428bca !important;
+}
+.ui-outputlabel.welcome-msg-css{
+    text-align: left !important;
+    font-size:22px  !important;
+    text-transform: capitalize !important;
+    font-weight: bold !important;
+    color:#428bca !important;
+}
+.ui-fieldset .ui-fieldset-legend.customFieldSetCSS{
+    background: none;
+    padding-top: 0.2em !important;
+    padding-right: 1em;
+    padding-bottom: 0.2em !important;
+    padding-left: 1em;
+    color:#000 !important;
+    font-size:10px  !important;
+    width: 18.0em !important;
+    text-transform: capitalize !important;
+}
+longestFieldsetLegendCSS{
+    background: none;
+    padding-top: 0.2em !important;
+    padding-right: 1em;
+    padding-bottom: 0.2em !important;
+    padding-left: 1em;
+    color:#428bca !important;
+    font-size:12px  !important;
+    width: 29.0em !important;
+    text-transform: capitalize !important;
+}
+.ui-fieldset .ui-fieldset-legend.xlongestFieldsetLegendCSS{
+    background: none;
+    padding-top: 0.2em !important;
+    padding-right: 1em;
+    padding-bottom: 0.2em !important;
+    padding-left: 1em;
+    color:#428bca !important;
+    font-size:1.6em  !important;
+    width:35.0em !important;
+    text-transform: capitalize !important;
+}
+.ui-fieldset .ui-fieldset-legend.xxlongestFieldsetLegendCSS{
+    background: none;
+    padding-top: 0.2em !important;
+    padding-right: 1em;
+    padding-bottom: 0.2em !important;
+    padding-left: 1em;
+    color:#428bca !important;
+    font-size:1.6em  !important;
+    width:50.0em !important;
+    text-transform: capitalize !important;
+}
+.panel{
+    border-color: #c8c8c8 !important;
+}
+.panel-footer{
+    border-color: #c8c8c8 !important;
+}
+.panel-heading{
+    border-color: #c8c8c8 !important;
+}
+.panel-title{
+
+}
+.navbar{
+    border-color: #c8c8c8 !important;
+}
+.navbar-text{
+    font-size:1.35em  !important;
+}
+.ui-fieldset{
+    background: none;
+}
+.ui-fieldset .ui-fieldset-legend{
+    background: none;
+    padding-top: 0.1em !important;
+    padding-right: 1em;
+    padding-bottom: 0.1em !important;
+    padding-left: 1em;
+    color:#428bca !important;
+    font-size:1.4em  !important;
+    font-style: normal !important;
+    width: 22.0em !important;
+    text-transform: capitalize !important;
+}
+.ui-separator{
+    color:#428bca !important;
+}
+.content-custom-css{
+    width: 100%  !important;
+    height: 100%
+}
+.ui-chkbox-all {
+    text-align: center;
+}
+.correct{
+    color: green  !important ;
+}
+.incorrect{
+    color:red !important ;
+}
+.authorised{
+    color: green !important ;
+}
+unauthorised{
+    color:red !important;
+}
+/*******************************Tree*******************************************/
+.ui-tree{
+    width:600px !important;
+}
+/*Main container*/
+.ui-tree-container{
+    width:auto !important;
+}
+/*root node container.*/
+.ui-treenode{
+
+}
+/*Tree node*/
+.ui-treenode-content{
+
+}
+/*Tree node content*/
+.ui-treenode-icon{
+
+}
+/*Tree node icon*/
+.ui-tree-toggler{
+
+}
+/*Toggle icon*/
+.ui-treenode-label{
+    color:#428bca !important;
+    font-size:10px  !important;
+}
+/*Tree node label*/
+.ui-treenode-parent{
+
+}
+/*Nodes with children*/
+.ui-treenode-leaf{
+
+}
+.ui-treetable{
+
+}
+.ui-treetable-header{
+    font-size:0.895em !important;
+    font-family: 'Tangerine', serif !important;
+    border-color:#DCDCDC !important;
+}
+.ui-treetable-data{
+    font-size:0.895em !important;
+    font-family: 'Tangerine', serif !important;
+    border-color:#DCDCDC !important;
+}
+.ui-dataview{
+    border: 1px solid #D4AF37;
+}
+.ui-dataview-header{
+    border: 1px solid #D4AF37;
+}
+.ui-dataview-content{
+    padding: 25px 10px;
+}
+.ui-dataview-list .ui-dataview-row {
+    border-bottom: 1px solid #D4AF37;
+    padding: 25px 10px;
+    border-bottom-color:#D4AF37;
+}
+.logo {
+    width: 5%;
+}
+.detail {
+    width: 85%;
+}
+.pagenumberStyle{
+    font-size:1.6em !important;
+    font-family: 'Tangerine', serif !important;
+    color:#000 !important;
+}
+.customCSS{
+    font-size:1.35em !important;
+}
+.sessionExpiryStyle{
+    color: red !important;
+    font-weight: bold;
+    font-size:1.2em !important;
+    text-align: center;
+}
+.ui-datagrid{
+    border: none !important;
+}
+.ui-datagrid-content{
+    border: none !important;
+}
+.ui-datagrid-column{
+    width: 50% !important;
+}
+.datagripColumnCss{
+    width: 50%
+}
+.datagripColumnsCss{
+    width: 100%
+}
+body .ui-datatable .ui-datatable-data>tr.ui-state-highlight {
+    background:#fff !important;
+    color: #000 !important;
+}
+input[type="text"][disabled] {
+    color: red;
+}
+select option [disabled] {
+    color: red;
+}
+.tabviewstylecss{
+
+}
+/*************** Bootsfaces style******************/
+.nav-tabs{
+    font-weight: bold;
+    /*font-size:1.1em;*/
+}
+.nav-tabs > li > a{
+    /*font-size:1.1em;*/
+    font-weight: bold;
+}
+.nav-tabs > li.active > a, .nav-tabs > li.active{
+    color:#419641 !important;
+    /*font-size:1.1em;*/
+    font-weight: bold;
+    border-bottom:none;
+    border-left:1px solid #c8c8c8;
+    border-right:1px solid #c8c8c8;
+    border-top:1px solid #c8c8c8;
+}
+.tab-pane{
+    border: 1px solid #c8c8c8;
+    padding: 10px !important;
+}
+/*************** End******************/
+.input-group .form-control {
+    font-size:1.35em !important;
+}
+textarea.form-control {
+    font-size:1.35em !important;
+}
+
+#tabView\:summaryPanel .ui-panelgrid .ui-panelgrid-cell,
+#review #rulingSummaryPanel .ui-panelgrid .ui-panelgrid-cell,
+#shortSummaryPanel .ui-panelgrid .ui-panelgrid-cell{
+    font-size: 13px !important;
+    background: none !important;
+}
+
+.custom-tooltip {
+    background-color: #f9f9f9 !important;
+    color: #222 !important;
+    font-size: 13px !important;
+    font-family: 'Segoe UI', sans-serif !important;
+    padding: 8px !important;
+    border: 1px solid #ccc !important;
+}
+
+.text-right {
+  text-align: right !important;
+}
+
+.justify-end {
+  justify-content: flex-end !important;
+}
+
+.query-container {
+    max-width: 650px !important;
+}
+

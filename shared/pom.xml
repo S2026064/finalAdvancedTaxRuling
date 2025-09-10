@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>za.gov.sars.atr</groupId>
+        <artifactId>finalAdvancedTaxRuling</artifactId>
+        <version>1.0.0</version>
+    </parent>
+    <groupId>za.gov.sars.shared</groupId>
+    <artifactId>shared</artifactId>
+    <version>1.0.0</version>
+    <name>shared</name>
+    <url>http://maven.apache.org</url>
+    <dependencies>
+        <dependency>
+            <groupId>za.gov.sars.common</groupId>
+            <artifactId>common</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>za.gov.sars.service</groupId>
+            <artifactId>service</artifactId>
+            <version>1.0.0</version>
+            <!--PLEASE REMEMBER TO UNCOMMENT javassist EXCLUSIONS WHEN YOU DEPLOY TO WEBSPHERE AND COMMENT IT WHEN DEPLOYING TO JBOSS-->
+            <!--exclusions>                
+            <exclusion>
+            <groupId>org.javassist</groupId>
+            <artifactId>javassist</artifactId>
+            </exclusion>
+            </exclusions-->
+        </dependency>
+    </dependencies>
+</project>

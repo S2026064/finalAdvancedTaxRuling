@@ -1,0 +1,32 @@
+<ui:component xmlns="http://www.w3.org/1999/xhtml"
+              xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+              xmlns:h="http://xmlns.jcp.org/jsf/html"
+              xmlns:f="http://xmlns.jcp.org/jsf/core"
+              xmlns:p="http://primefaces.org/ui"
+              xmlns:b="http://bootsfaces.net/ui"
+              xmlns:cc="http://xmlns.jcp.org/jsf/composite">
+
+    <cc:interface>
+        <cc:attribute name="entity" required="true" />
+        <cc:attribute name="title" required="false" default="Application Summary" />
+    </cc:interface>
+
+    <cc:implementation>
+        <b:panel title="#{cc.attrs.title}" id="shortSummaryPanel" look="primary" collapsible="false">
+            <p:panelGrid columns="4" styleClass="ui-panelgrid-blank" style="width:100%;">
+                <h:outputLabel value="Applicant Name:" styleClass="no-bg"/>
+                <h:outputText value="#{cc.attrs.entity.applicantName}" styleClass="no-bg"/>
+
+                <h:outputLabel value="ATR Reference Number:" styleClass="no-bg"/>
+                <h:outputText value="#{cc.attrs.entity.caseNum}" styleClass="no-bg"/>
+
+                <h:outputLabel value="Application Status:" styleClass="no-bg"/>
+                <h:outputText value="#{cc.attrs.entity.status.toString()}" styleClass="no-bg"/>
+
+                <h:outputLabel value="Status comment:" styleClass="no-bg"/>
+                <h:outputText value="#{cc.attrs.entity.status.toString()}" styleClass="no-bg"/>
+            </p:panelGrid>
+        </b:panel>
+    </cc:implementation>
+</ui:component>
+

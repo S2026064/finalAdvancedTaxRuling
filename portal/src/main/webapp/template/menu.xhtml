@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+    </h:head>
+    <h:body>
+        <ui:composition>
+            <b:navBar fluid="true"   brandHref="#" rendered="true">
+                <b:navbarLinks >
+                    <b:navCommandLink iconAwesome="fa-home" action="#{menuBean.route('/home')}" immediate="true"></b:navCommandLink>
+                    <b:navCommandLink value="Application" action="#{menuBean.route('/application')}"  immediate="true" rendered="#{menuBean.activeUser.userRole.atrApplicationSettings.application}"></b:navCommandLink>
+                    <b:navCommandLink value="Estimation Published" action="#{menuBean.route('/estimationpublished')}"  immediate="true" rendered="true"></b:navCommandLink>
+                    <b:navCommandLink value="Rulings Published" action="#{menuBean.route('/rulingspublished')}" immediate="true" rendered="true"></b:navCommandLink>
+                    <b:navCommandLink value="Payment History" action="#{menuBean.route('/payment')}" immediate="true" rendered="true"></b:navCommandLink>
+                     <b:navCommandLink  value="Upload Document" action="#{menuBean.route('/document')}" immediate="true" rendered="true"></b:navCommandLink>
+                    <b:navCommandLink  value="System Query" action="#{menuBean.route('/query')}" immediate="true" rendered="true"></b:navCommandLink>
+                </b:navbarLinks>
+            </b:navBar> 
+        </ui:composition>
+    </h:body>
+</html>

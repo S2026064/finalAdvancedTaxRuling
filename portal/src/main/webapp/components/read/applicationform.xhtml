@@ -1,0 +1,364 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/XHtml.xhtml to edit this template
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html">
+    <ui:component>
+
+        <b:panel look="default" collapsible="false" style="font-size: 14px;">
+            <b:panelGrid colSpans="4,4,4"  size="lg" styleClass="ui-fluid" style="margin-top: 5px;">
+                <b:panel look="primary" title="I am applying for a:" collapsible="false" style="min-height:267px">
+                    <b:formGroup>
+                        <p:selectOneRadio style="font-size: 14px;" value="#{sharedBean.entity.rulingType}" layout="pageDirection"  converter="entityConverter" required="true" requiredMessage="Please select an option">
+                            <f:selectItems value="#{sharedBean.rulingTypes}"/>
+                        </p:selectOneRadio>
+                    </b:formGroup>
+                </b:panel>
+                <b:panel look="primary" title="In my capacity as:" collapsible="false" style="min-height:267px">
+                    <b:formGroup>
+                        <p:selectOneRadio style="font-size: 14px;" value="#{sharedBean.entity.applicationType}" layout="pageDirection" converter="entityConverter" required="true" requiredMessage="Please select an option">
+                            <f:selectItems value="#{sharedBean.applicationTypes}" />
+                            <p:ajax event="change" update="practitioner"/>
+                        </p:selectOneRadio>
+                        <h:panelGroup id="practitioner" layout="block">
+                            <b:formGroup  rendered="#{sharedBean.entity.applicationType.toString() eq 'on behalf of a third party/class'}">
+                                <p:outputLabel value="Tax practitioner number:"/>
+                                <p:inputText value="#{sharedBean.entity.taxPractitionerNumber}" placeholder="Enter practitioner number" required="true" requiredMessage="Enter tax practitioner number" />
+                            </b:formGroup>
+                        </h:panelGroup>
+                    </b:formGroup>
+                </b:panel>
+                <b:panel look="primary" title="Subject of the ATR application" collapsible="false" style="min-height:267px">
+                    <b:formGroup>
+                        <p:selectBooleanCheckbox itemLabel="Income Tax Act 58 of 1962" value="#{sharedBean.entity.taxType.incomeTaxAct}" />
+                    </b:formGroup>
+
+                    <b:formGroup>
+                        <p:selectBooleanCheckbox itemLabel="Value Added Tax Act 89 of 1991" value="#{sharedBean.entity.taxType.vatTaxAct}" />
+                    </b:formGroup>
+
+                    <b:formGroup>
+                        <p:selectBooleanCheckbox itemLabel="Securities Transfer Tax Act 25 of 2007" value="#{sharedBean.entity.taxType.securitiesTransferTaxAct}" />
+                    </b:formGroup>
+
+                    <b:formGroup>
+                        <p:selectBooleanCheckbox itemLabel="Transfer Duty Act 40 of 1949" value="#{sharedBean.entity.taxType.transferDutyAct}" />
+                    </b:formGroup>
+                </b:panel>
+            </b:panelGrid>
+
+            <b:panelGrid colSpans="12"  size="lg" styleClass="ui-fluid">
+                <b:panel look="primary" title="My details are as follows:" collapsible="false">
+                    <b:panelGrid colSpans="6,6"  size="lg" styleClass="ui-fluid">
+                        <b:formGroup>
+                            <p:outputLabel value="Name"/>
+                            <p:inputText required="true" value="#{sharedBean.userDetail.fullName}" readonly="true"/>
+                        </b:formGroup>
+                        <b:formGroup>
+                            <p:outputLabel value="Cellphone"/>
+                            <p:inputText required="true" value="#{sharedBean.userDetail.cellphone}" readonly="true"/>
+                        </b:formGroup>
+                        <b:formGroup>
+                            <p:outputLabel value="Email"/>
+                            <p:inputText required="true" value="#{sharedBean.userDetail.emailAddress}" readonly="true"/>
+                        </b:formGroup>
+                        <b:formGroup>
+                            <p:outputLabel value="Telephone" />
+                            <p:inputText required="true" value="#{sharedBean.userDetail.telephone}" readonly="true"/>
+                        </b:formGroup>
+                    </b:panelGrid>
+                </b:panel>
+
+                <b:panel title="Applicant information" look="primary" collapsible="false">
+                    <b:panelGrid colSpans="6,6"  size="lg" styleClass="ui-fluid">
+                        <b:formGroup>
+                            <p:outputLabel value="Applicant name: " title="[this is the name that will be used/ refered to during the ruling application]" />
+                            <p:inputText required="true" value="#{sharedBean.entity.applicantName}" />
+                        </b:formGroup>
+                        <b:formGroup>
+                            <p:outputLabel value="email Address"/>
+                            <p:inputText required="true" value="#{sharedBean.entity.applicantEmail}" />
+                        </b:formGroup>
+                    </b:panelGrid>
+                    <p:fieldset legend="Business Address">
+                        <b:panelGrid colSpans="6,6"  size="lg" styleClass="ui-fluid">
+                            <b:formGroup>
+                                <p:outputLabel value="Street Name"/>
+                                <p:inputText required="true" value="#{sharedBean.entity.address.line1}" />
+                            </b:formGroup>
+                            <b:formGroup>
+                                <p:outputLabel value="Street Number"/>
+                                <p:inputText required="true" value="#{sharedBean.entity.address.line2}" />
+                            </b:formGroup>
+                            <b:formGroup>
+                                <p:outputLabel value="City"/>
+                                <p:inputText required="true" value="#{sharedBean.entity.address.line3}" />
+                            </b:formGroup>
+                            <b:formGroup>
+                                <p:outputLabel value="Province"/>
+                                <p:selectOneMenu  converter="entityConverter" value="#{sharedBean.entity.address.province}" required="true" requiredMessage="Please select province ">
+                                    <f:selectItem itemLabel="Select One"  noSelectionOption="true"/>
+                                    <f:selectItems value="#{sharedBean.provinces}"  var="province" itemLabel="#{province.toString()}" itemValue="#{province}"/>
+                                </p:selectOneMenu>
+                            </b:formGroup>
+                            <b:formGroup>
+                                <p:outputLabel value="Code"/>
+                                <p:inputText required="true" value="#{sharedBean.entity.address.postalCode}" />
+                            </b:formGroup>
+                        </b:panelGrid>
+                    </p:fieldset>
+
+                    <b:formGroup>
+                        <b:panel>
+                            <b:panelGrid colSpans="10,2" size="md" styleClass="ui-fluid" style="font-size: 14px;margin-bottom: 15px">
+                                <p:column styleClass="xlarge"  style="box-sizing:border-box">
+                                    <h:outputText value="Is the applicant a resident of the republic?"/>
+                                </p:column> 
+                                <p:column styleClass="md">
+                                    <p:selectOneRadio value="#{sharedBean.entity.saResident}" converter="entityConverter" required="true" requiredMessage="Please select an option">
+                                        <f:selectItems value="#{sharedBean.saResidents}" />
+                                    </p:selectOneRadio>
+                                </p:column>
+                            </b:panelGrid>
+                        </b:panel>
+                    </b:formGroup>
+                </b:panel>
+
+
+                <b:panel look="primary" title="Click the relevant option" collapsible="false">
+                    <b:formGroup>
+                        <p:selectOneRadio value="#{sharedBean.entity.representativeType}" layout="pageDirection" converter="entityConverter" required="true" requiredMessage="Please select an option">
+                            <f:selectItems value="#{sharedBean.representativeTypes}" />
+                            <p:ajax event="change" update="relevantOptionContainer" />
+                        </p:selectOneRadio>
+                    </b:formGroup>
+                    <p:separator/>
+
+                    <h:panelGroup id="relevantOptionContainer" layout="block">
+                        <p:fieldset legend="Company" rendered="#{sharedBean.entity.representativeType.toString() eq 'Company'}">
+                            <ui:repeat var="response" value="#{sharedBean.applicationQuestions}" varStatus="companyVarStatus">
+                                <b:panelGrid colSpans="10,2" size="md" styleClass="ui-fluid" rendered="#{response.question.questionType eq 'COMPANY_QUESTIONS'}" style="font-size: 14px;margin-bottom: 15px">
+                                    <p:column styleClass="xlarge"  style="box-sizing:border-box">
+                                        <h:outputText value="#{response.question.description}" />
+                                    </p:column> 
+                                    <p:column styleClass="md">
+                                        <p:selectOneRadio value="#{response.responseOption}"  converter="entityConverter" required="true" requiredMessage="Please select an option">
+                                            <f:selectItems value="#{sharedBean.responsesList}" />
+                                            <p:ajax event="change" update="tabView:company"/>
+                                        </p:selectOneRadio>
+                                    </p:column>
+                                </b:panelGrid>
+                            </ui:repeat>
+                            <p:separator/>
+                            <p:outputPanel id="company" layout="block">
+                                <b:formGroup rendered="#{sharedBean.companyQuestionSelectedYes('Is the company registered in South Africa for tax purposes?')}">
+                                    <b:panelGrid colSpans="4,4,4"  size="lg" styleClass="ui-fluid">
+                                        <b:formGroup>
+                                            <p:outputLabel value="Income Tax reference number"/>
+                                            <p:inputText required="true" value="#{sharedBean.entity.incomeTaxReference}" type="number" placeholder="Enter Income Tax reference number"/>
+                                        </b:formGroup>
+                                        <b:formGroup>
+                                            <p:outputLabel value="Vat reference number"/>
+                                            <p:inputText required="true" value="#{sharedBean.entity.vatReference}" type="number" placeholder="Enter VAT reference number:"/>
+                                        </b:formGroup>
+                                        <b:formGroup>
+                                            <p:outputLabel value="Paye reference number"/>
+                                            <p:inputText required="true" value="#{sharedBean.entity.payeReference}" type="number" placeholder="Enter PAYE reference number"/>
+                                        </b:formGroup>
+                                    </b:panelGrid>
+                                </b:formGroup>
+                            </p:outputPanel>
+                        </p:fieldset>
+                        <p:fieldset legend="Individual" rendered="#{sharedBean.entity.representativeType.toString() eq 'Individual'}">
+                            <b:panelGrid colSpans="6,6"  size="lg" styleClass="ui-fluid">
+                                <b:formGroup>
+                                    <p:outputLabel value="Email address"/>
+                                    <p:inputText required="true" value="#{sharedBean.userDetail.emailAddress}" readonly="true"/>
+                                </b:formGroup>
+                                <b:formGroup>
+                                    <p:outputLabel value="Cellphone"/>
+                                    <p:inputText required="true" value="#{sharedBean.userDetail.cellphone}" readonly="true"/>
+                                </b:formGroup>
+                            </b:panelGrid>
+                            <ui:repeat var="response" value="#{sharedBean.applicationQuestions}" varStatus="individualVarStatus">
+                                <b:panelGrid colSpans="10,2" size="md" styleClass="ui-fluid" rendered="#{response.question.questionType eq 'INDIVIDUAL'}" style="font-size: 14px;margin-bottom: 15px">
+                                    <p:column styleClass="xlarge"  style="box-sizing:border-box">
+                                        <h:outputText value="#{response.question.description}" />
+                                    </p:column> 
+                                    <p:column styleClass="md">
+                                        <p:selectOneRadio value="#{response.responseOption}"  converter="entityConverter" required="true" requiredMessage="Please select an option">
+                                            <f:selectItems value="#{sharedBean.responsesList}" />
+                                            <p:ajax event="change" update="tabView:individual"/>
+                                        </p:selectOneRadio>
+                                    </p:column>
+                                </b:panelGrid>
+                            </ui:repeat>
+                            <p:separator/>
+                            <p:outputPanel id="individual" layout="block">
+                                <b:formGroup rendered="#{sharedBean.entity.representativeType.toString() eq 'Individual' and sharedBean.companyQuestionSelectedYes('Is this person registered in south africa for tax purposes?')}">
+                                    <b:panelGrid colSpans="4,4,4"  size="lg" styleClass="ui-fluid">
+                                        <b:formGroup>
+                                            <p:outputLabel value="Identity number"/>
+                                            <p:inputText required="true" value="#{sharedBean.userDetail.idNumber}" type="number" placeholder="Enter ID number"/>
+                                        </b:formGroup>
+                                        <b:formGroup>
+                                            <p:outputLabel value="Income tax reference number"/>
+                                            <p:inputText required="true" value="#{sharedBean.userDetail.incomeTaxNum}" type="number" placeholder="Enter Income Tax reference number"/>
+                                        </b:formGroup>
+                                        <b:formGroup>
+                                            <p:outputLabel value="Passsport number"/>
+                                            <p:inputText required="true" value="#{sharedBean.userDetail.passPortNumber}" type="number" placeholder="Enter Passport number"/>
+                                        </b:formGroup>
+                                    </b:panelGrid>
+                                </b:formGroup>
+                            </p:outputPanel>
+                        </p:fieldset>
+                        <p:fieldset legend="Description of the class" rendered="#{sharedBean.entity.representativeType.toString() eq 'Class'}">
+                            <b:formGroup>
+                                <p:selectOneRadio value="#{sharedBean.entity.classDescription}" layout="pageDirection" converter="entityConverter" required="true" requiredMessage="Please select an option">
+                                    <f:selectItems value="#{sharedBean.descriptions}" />
+                                    <p:ajax event="change" update="classDescription"/>
+                                </p:selectOneRadio>
+                            </b:formGroup>
+                            <h:panelGroup id="classDescription" layout="block">
+                                <b:panelGrid colSpans="6,6"  size="lg" styleClass="ui-fluid">
+                                    <b:formGroup rendered="#{sharedBean.entity.classDescription.toString() eq 'Other'}">
+                                        <p:outputLabel value="Other class description"/>
+                                        <p:inputText 
+                                            value="#{sharedBean.entity.otherDescription}"
+                                            rendered="#{sharedBean.entity.classDescription.toString() eq 'Other'}"
+                                            placeholder="Enter class descrition" />
+                                    </b:formGroup>
+                                </b:panelGrid>
+                            </h:panelGroup>
+                        </p:fieldset>
+                        <p:fieldset legend="Trust" rendered="#{sharedBean.entity.representativeType.toString() eq 'Trust'}">
+                            <b:panelGrid colSpans="6,6"  size="lg" styleClass="ui-fluid">
+                                <b:formGroup>
+                                    <p:outputLabel value="Trust number:"/>
+                                    <p:inputText required="true" value="#{sharedBean.entity.trustNumber}" type="number"/>
+                                </b:formGroup>
+                                <b:formGroup>
+                                    <p:outputLabel value="Date of registation"/>
+                                    <p:datePicker required="true" value="#{sharedBean.entity.firstRegDate}"/>
+                                </b:formGroup>
+                            </b:panelGrid>
+                            <ui:repeat var="response" value="#{sharedBean.applicationQuestions}" varStatus="trustVarStatus">
+                                <b:panelGrid colSpans="10,2" size="md" styleClass="ui-fluid" rendered="#{response.question.questionType eq 'TRUST_QUESTIONS'}" style="font-size: 14px;margin-bottom: 15px">
+                                    <p:column styleClass="xlarge"  style="box-sizing:border-box" >
+                                        <h:outputText value="#{response.question.description}" />
+                                    </p:column> 
+                                    <p:column styleClass="md" >
+                                        <p:selectOneRadio value="#{response.responseOption}"  converter="entityConverter" required="true" requiredMessage="Please select an option">
+                                            <f:selectItems value="#{sharedBean.responsesList}" />
+                                            <p:ajax event="change" update="tabView:trust"/>
+                                        </p:selectOneRadio>
+                                    </p:column>
+                                </b:panelGrid>
+                            </ui:repeat>
+                            <p:outputPanel id="trust" layout="block">
+                                <b:panelGrid colSpans="6,6"  size="lg" styleClass="ui-fluid">
+                                    <b:formGroup rendered="#{sharedBean.entity.representativeType.toString() eq 'Trust' and sharedBean.companyQuestionSelectedYes('Is the trust registered in South Africa for tax purposes?')}">
+                                        <p:outputLabel value="Income Tax reference number"/>
+                                        <p:inputText required="true" value="#{sharedBean.entity.incomeTaxReference}" type="number" placeholder="Enter Income Tax reference number"/>
+                                    </b:formGroup>
+                                </b:panelGrid>
+                            </p:outputPanel>
+                        </p:fieldset>
+                        <p:fieldset legend="Foreign Entity" rendered="#{sharedBean.entity.representativeType.toString() eq 'Foreign Entity'}">
+                            <b:formGroup>
+                                <p:selectOneRadio value="#{sharedBean.entity.entityType}" layout="pageDirection" converter="entityConverter" required="true" requiredMessage="Please select an option">
+                                    <f:selectItems value="#{sharedBean.entityTypes}" />
+                                    <p:ajax event="change" update="foreignEntity"/>
+                                </p:selectOneRadio>
+                            </b:formGroup>
+                            <b:formGroup id="foreignEntity">
+                                <ui:repeat id="foreignEntityRepeat" var="response" value="#{sharedBean.applicationQuestions}" varStatus="foreignEntityVarStatus" rendered="#{sharedBean.entity.entityType.toString() eq 'Company'}">
+                                    <b:panelGrid colSpans="10,2" size="md" styleClass="ui-fluid" rendered="#{response.question.questionType eq 'COMPANY_QUESTIONS'}" style="font-size: 14px;margin-bottom: 15px">
+                                        <p:column styleClass="xlarge"  style="box-sizing:border-box">
+                                            <h:outputText value="#{response.question.description}" />
+                                        </p:column> 
+                                        <p:column styleClass="md">
+                                            <p:selectOneRadio value="#{response.responseOption}"  converter="entityConverter" required="true" requiredMessage="Please select an option">
+                                                <f:selectItems value="#{sharedBean.responsesList}" />
+                                                <p:ajax event="change" update="tabView:foreignEntityCompany"/>
+                                            </p:selectOneRadio>
+                                        </p:column>
+                                    </b:panelGrid>
+
+                                </ui:repeat>
+                                <p:outputPanel id="foreignEntityCompany" layout="block">
+                                    <b:formGroup rendered="#{sharedBean.entity.representativeType.toString() eq 'Foreign Entity' and sharedBean.companyQuestionSelectedYes('Is the company registered in South Africa for tax purposes?')}">
+                                        <b:panelGrid colSpans="4,4,4"  size="lg" styleClass="ui-fluid">
+                                            <b:formGroup>
+                                                <p:outputLabel value="Income Tax reference number"/>
+                                                <p:inputText required="true" value="#{sharedBean.entity.incomeTaxReference}" type="number" placeholder="Enter Income Tax reference number"/>
+                                            </b:formGroup>
+                                            <b:formGroup>
+                                                <p:outputLabel value="VAT reference number"/>
+                                                <p:inputText required="true" value="#{sharedBean.entity.vatReference}" type="number" placeholder="Enter VAT reference number:"/>
+                                            </b:formGroup>
+                                            <b:formGroup>
+                                                <p:outputLabel value="PAYE reference number"/>
+                                                <p:inputText required="true" value="#{sharedBean.entity.payeReference}" type="number" placeholder="Enter PAYE reference number"/>
+                                            </b:formGroup>
+                                        </b:panelGrid>
+                                    </b:formGroup>
+                                    <h:panelGroup id="otherDescription" layout="block" rendered="#{sharedBean.entity.entityType.toString() eq 'Other'}">
+                                        <b:panelGrid colSpans="6,6"  size="lg" styleClass="ui-fluid">
+                                            <b:formGroup>
+                                                <p:outputLabel value="Other foreign entity description"/>
+                                                <p:inputText 
+                                                    value="#{sharedBean.entity.otherDescription}"
+                                                    placeholder="Enter foreign entity description" />
+                                            </b:formGroup>
+                                        </b:panelGrid>
+                                    </h:panelGroup>
+                                </p:outputPanel>
+
+                            </b:formGroup>
+                        </p:fieldset>
+                        <p:fieldset legend="Public Benefit Organisation" rendered="#{sharedBean.entity.representativeType.toString() eq 'Public Benefit Organisation'}"> 
+                            <ui:repeat var="response" value="#{sharedBean.applicationQuestions}" varStatus="publicBenefitVarStatus">
+                                <b:panelGrid colSpans="10,2" size="md" styleClass="ui-fluid" rendered="#{response.question.questionType eq 'BPO'}" style="font-size: 14px;margin-bottom: 15px">
+                                    <p:column styleClass="xlarge"  style="box-sizing:border-box">
+                                        <h:outputText value="#{response.question.description}" />
+                                    </p:column> 
+                                    <p:column styleClass="md">
+                                        <p:selectOneRadio value="#{response.responseOption}"  converter="entityConverter" required="true" requiredMessage="Please select an option">
+                                            <f:selectItems value="#{sharedBean.responsesList}" />
+                                            <p:ajax event="change" update="tabView:bpo"/>
+                                        </p:selectOneRadio>
+                                    </p:column>
+                                </b:panelGrid>
+                            </ui:repeat>
+                            <p:outputPanel id="bpo" layout="block">
+                                <b:formGroup rendered="#{sharedBean.entity.representativeType.toString() eq 'Public Benefit Organisation' and sharedBean.companyQuestionSelectedYes('Is the PBO registered in South Africa for tax purposes?')}">
+                                    <b:panelGrid colSpans="6,6"  size="lg" styleClass="ui-fluid">
+                                        <b:formGroup>
+                                            <p:outputLabel value="Income Tax reference number"/>
+                                            <p:inputText required="true" value="#{sharedBean.entity.incomeTaxReference}" type="number" placeholder="Enter Income Tax reference number"/>
+                                        </b:formGroup>
+                                        <b:formGroup>
+                                            <p:outputLabel value="Paye reference number"/>
+                                            <p:inputText required="true" value="#{sharedBean.entity.payeReference}" type="number" placeholder="Enter PAYE reference number"/>
+                                        </b:formGroup>
+                                    </b:panelGrid>
+                                </b:formGroup>
+                            </p:outputPanel>
+                        </p:fieldset>
+                    </h:panelGroup>
+
+                </b:panel>
+            </b:panelGrid>
+        </b:panel>
+
+    </ui:component>
+</html>

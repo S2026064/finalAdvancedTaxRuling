@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
+    <h:body>
+        <ui:composition>
+            <p:idleMonitor timeout="10000">
+                <p:ajax event="idle" listener="#{headerBean.onIdle()}" update="@form" />
+                <p:ajax event="active" listener="#{headerBean.onActive()}" update="@form"/>
+            </p:idleMonitor> 
+            <b:row>
+                <b:column col-md="4">
+                    <p:graphicImage name="sarslogo.png" library="images" width="229" height="70"/>
+                </b:column>
+                <b:column col-md="5">
+                    <b:panelGrid colSpans="12" size="lg" styleClass="ui-fluid">
+                        <b:formGroup>
+                            <p:outputLabel value="TARIFF DETERMINATION SYSTEM" styleClass="headercss"/>
+                        </b:formGroup>
+                        <b:formGroup>
+                            <p:outputLabel styleClass="sessionExpiryStyle" value="Your session is about to expire!..." rendered="#{headerBean.hideDialogFlag}">
+                                <p:commandLink styleClass="sessionExpiryStyle" value="Click here to Continue : " action="#{headerBean.resetSession()}" update="@form"/>
+                                <pe:timer timeout="#{headerBean.timeoutParam}" forward="false" singleRun="false"  listener="#{headerBean.onTimeout}"  />
+                            </p:outputLabel>
+                        </b:formGroup>
+                    </b:panelGrid>
+                </b:column>
+                <b:column col-md="3" rendered="#{headerBean.activeUser.userLoginIndicator}">
+                    <b:row>
+                        <h:outputFormat value="[{0} {1}]">
+                            <f:param value="Login As :"/>
+                            <f:param value="#{headerBean.activeUser.fullName}"/>
+                        </h:outputFormat>
+                    </b:row>
+                    <b:row>
+                        <h:outputFormat value="[{0} {1}]">
+                            <f:param value="S-ID Number:"/>
+                            <f:param value="#{headerBean.activeUser.sid}"/>
+                        </h:outputFormat>
+                    </b:row>
+                    <b:row>
+                        <h:outputFormat value="[{0} {1}]">
+                            <f:param value="Role:"/>
+                            <f:param value="#{headerBean.activeUser.userRole.description}"/>
+                        </h:outputFormat>
+                    </b:row>
+                </b:column>
+            </b:row>
+        </ui:composition>
+    </h:body>
+</html>
+
